@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hợp đồng dịch vụ cá nhân — HKD Phan Thị Thủy</title>
+<style>
+  :root{
+    --bg:#eaeef1; --panel:#ffffff; --ink:#11333f; --ink-soft:#4d6470;
+    --line:#d7dee3; --line-soft:#e7ecef; --field:#f7f9fa;
+    --teal:#0f5566; --teal-d:#0b3f4c; --seal:#b5402f; --seal-soft:#f4e3df;
+    --ok:#1f7a4d; --shadow:0 1px 2px rgba(17,51,63,.06),0 8px 24px rgba(17,51,63,.07);
+    --r:12px;
+  }
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.5;padding-bottom:96px}
+  .serif{font-family:Cambria,"Times New Roman",Georgia,serif}
+  header.bar{background:linear-gradient(180deg,#0f5566,#0b3f4c);color:#eaf3f5;padding:22px 20px}
+  header.bar .wrap{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px}
+  .seal{flex:0 0 auto;width:54px;height:54px;border-radius:50%;border:2px solid var(--seal);color:var(--seal);display:grid;place-items:center;font-weight:700;font-size:11px;text-align:center;background:#fff;line-height:1.05;transform:rotate(-8deg);box-shadow:0 0 0 4px rgba(181,64,47,.12)}
+  header.bar h1{margin:0;font-size:22px;letter-spacing:.2px}
+  header.bar p{margin:3px 0 0;font-size:13px;color:#bcd4d9}
+  .backlink{color:#eaf3f5;text-decoration:none;border:1px solid rgba(255,255,255,.3);padding:8px 14px;border-radius:8px;font-size:14px;white-space:nowrap}
+  main{max-width:920px;margin:22px auto;padding:0 16px;display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .card>.head{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line-soft);background:#fbfcfd}
+  .card>.head .ix{flex:0 0 auto;width:26px;height:26px;border-radius:7px;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+  .card>.head h2{margin:0;font-size:16px}
+  .card>.head .note{margin-left:auto;font-size:12.5px;color:var(--ink-soft)}
+  .card>.body{padding:16px 18px}
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin:0 0 5px}
+  input[type=text], textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--field);color:var(--ink);font-size:15px;font-family:inherit}
+  textarea{min-height:64px;resize:vertical;line-height:1.45}
+  input[type=text]:focus, textarea:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(15,85,102,.12)}
+  .field{margin-bottom:13px} .field:last-child{margin-bottom:0}
+  .grid{display:grid;gap:13px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .dmy{grid-template-columns:1fr 1fr 1.2fr}
+  @media(max-width:620px){.g2,.g3{grid-template-columns:1fr}}
+  .chev{margin-left:8px;color:var(--ink-soft);cursor:pointer;user-select:none;font-size:13px;font-weight:600}
+  .collapsed .body{display:none}
+  .pill{display:inline-block;padding:3px 9px;border-radius:999px;background:#eef3f5;color:var(--ink-soft);font-size:12px;font-weight:600;margin-left:6px}
+  .calc{background:#f3f8f9;border:1px solid #d6e6ea;border-radius:9px;padding:10px 12px;font-size:14px;color:var(--ink);margin-top:8px}
+  .calc b{color:var(--teal-d)}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:9px}
+  .actionbar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:12px 16px;z-index:30}
+  .actionbar .wrap{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:14px}
+  .actionbar .hint{font-size:12.5px;color:var(--ink-soft)}
+  .btn-export{margin-left:auto;background:var(--teal);color:#fff;font-weight:700;font-size:16px;padding:13px 24px;border-radius:11px;display:inline-flex;align-items:center;gap:9px;box-shadow:0 6px 16px rgba(15,85,102,.28)}
+  .btn-export:hover{background:var(--teal-d)}
+  .btn-export:active{transform:translateY(1px)}
+  .btn-ghost{background:#eef2f4;color:var(--ink);font-weight:600;padding:11px 16px;border:1px solid var(--line)}
+  .btn-ghost:hover{background:#e3e9ec}
+  .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:var(--shadow)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{background:var(--seal)}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <div class="seal serif">HĐ<br>DV</div>
+    <div style="flex:1">
+      <h1 class="serif">Hợp đồng dịch vụ cá nhân</h1>
+      <p>HKD Phan Thị Thủy (Bên thuê) · điền thông tin cá nhân cung cấp dịch vụ → xuất Word.</p>
+    </div>
+    <a href="index.html" class="backlink">← Chọn mẫu khác</a>
+  </div>
+</header>
+
+<main>
+  <!-- THÔNG TIN CHUNG -->
+  <section class="card" id="cardInfo">
+    <div class="head">
+      <span class="ix">i</span>
+      <h2>Thông tin hợp đồng</h2>
+    </div>
+    <div class="body">
+      <div class="grid g2">
+        <div class="field"><label>Số hợp đồng</label><input type="text" id="hd_so" placeholder="VD: 01/2026/HĐ-NaLth"></div>
+        <div class="field"><label>Địa điểm ký</label><input type="text" id="hd_diadiem" placeholder="VD: Hà Nội"></div>
+      </div>
+      <label>Ngày ký hợp đồng</label>
+      <div class="grid dmy">
+        <input type="text" id="hd_ngay" placeholder="Ngày">
+        <input type="text" id="hd_thang" placeholder="Tháng">
+        <input type="text" id="hd_nam" placeholder="Năm (VD: 2026)">
+      </div>
+    </div>
+  </section>
+
+  <!-- BÊN A (preset HKD Phan Thị Thủy) -->
+  <section class="card collapsed" id="cardA">
+    <div class="head">
+      <span class="ix">A</span>
+      <h2>Bên A — Bên thuê dịch vụ <span class="pill">cố định</span></h2>
+      <span class="note">đã lưu sẵn</span>
+      <span class="chev" data-toggle="cardA">Sửa ▾</span>
+    </div>
+    <div class="body">
+      <div class="field"><label>Người đại diện (tên HKD hoặc cá nhân)</label><input type="text" id="a_daidien"></div>
+      <div class="field"><label>Địa chỉ</label><input type="text" id="a_diachi"></div>
+      <div class="field"><label>Mã số thuế</label><input type="text" id="a_mst"></div>
+    </div>
+  </section>
+
+  <!-- BÊN B (điền mới) -->
+  <section class="card" id="cardB">
+    <div class="head">
+      <span class="ix">B</span>
+      <h2>Bên B — Bên cung cấp dịch vụ <span class="pill">điền mới</span></h2>
+    </div>
+    <div class="body">
+      <div class="field"><label>Người đại diện (tên cá nhân)</label><input type="text" id="b_daidien" placeholder="VD: Lê Thanh Huyền"></div>
+      <div class="field"><label>Địa chỉ</label><input type="text" id="b_diachi" placeholder="VD: Số 51/3 Xuân An, phường 4, TP Đà Lạt, Lâm Đồng"></div>
+      <div class="field"><label>Điện thoại</label><input type="text" id="b_sdt" placeholder="VD: 0836234234"></div>
+    </div>
+  </section>
+
+  <!-- ĐIỀU 1: NỘI DUNG -->
+  <section class="card" id="cardND">
+    <div class="head">
+      <span class="ix">1</span>
+      <h2>Điều 1 — Nội dung vụ việc &amp; thời hạn</h2>
+    </div>
+    <div class="body">
+      <div class="field">
+        <label>1.1 Nội dung vụ việc</label>
+        <textarea id="nd_noidung" placeholder="VD: quay 01 video quảng cáo hàng thời trang và sử dụng hình ảnh 01 tháng"></textarea>
+      </div>
+      <div class="grid g2">
+        <div class="field">
+          <label>1.2 Thời hạn — Từ ngày</label>
+          <div class="grid dmy">
+            <input type="text" id="th_tu_ngay" placeholder="Ngày">
+            <input type="text" id="th_tu_thang" placeholder="Tháng">
+            <input type="text" id="th_tu_nam" placeholder="Năm">
+          </div>
+        </div>
+        <div class="field">
+          <label>Đến ngày</label>
+          <div class="grid dmy">
+            <input type="text" id="th_den_ngay" placeholder="Ngày">
+            <input type="text" id="th_den_thang" placeholder="Tháng">
+            <input type="text" id="th_den_nam" placeholder="Năm">
+          </div>
+        </div>
+      </div>
+      <div class="calc" id="th_calc">Thời hạn: <b id="th_days">— ngày</b></div>
+    </div>
+  </section>
+
+  <!-- ĐIỀU 2: THÙ LAO -->
+  <section class="card" id="cardTL">
+    <div class="head">
+      <span class="ix">2</span>
+      <h2>Điều 2 — Thù lao &amp; thanh toán</h2>
+    </div>
+    <div class="body">
+      <div class="grid g2">
+        <div class="field">
+          <label>Tổng giá trị hợp đồng (VNĐ, đã gồm thuế TNCN)</label>
+          <input type="text" id="tl_tong" placeholder="VD: 3,888,888" inputmode="numeric">
+        </div>
+        <div class="field">
+          <label>Số ngày thanh toán sau khi nghiệm thu</label>
+          <input type="text" id="tl_songay" placeholder="VD: 15">
+        </div>
+      </div>
+      <div class="calc">
+        Thuế TNCN 10%: <b id="tl_thue">— VNĐ</b><br>
+        Số tiền thực nhận (Bên B): <b id="tl_thucnhan">— VNĐ</b>
+      </div>
+      <div class="field" style="margin-top:13px">
+        <label>Bằng chữ (số tiền thực nhận)</label>
+        <input type="text" id="tl_bangchu" placeholder="VD: Ba triệu năm trăm nghìn đồng">
+      </div>
+      <div style="margin-top:10px;font-weight:600;color:var(--ink-soft);font-size:13px">2.4 Tài khoản thụ hưởng</div>
+      <div class="grid g2" style="margin-top:6px">
+        <div class="field"><label>Tên tài khoản</label><input type="text" id="bk_ten" placeholder="VD: Lê Thanh Huyền"></div>
+        <div class="field"><label>Số tài khoản</label><input type="text" id="bk_so" placeholder="VD: 6460601075"></div>
+      </div>
+      <div class="grid g2">
+        <div class="field"><label>Ngân hàng</label><input type="text" id="bk_nh" placeholder="VD: BIDV"></div>
+        <div class="field"><label>Chi nhánh</label><input type="text" id="bk_cn" placeholder="VD: Ninh Thuận"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="actionbar">
+  <div class="wrap">
+    <button class="btn-ghost" id="resetBtn" type="button">Xóa thông tin Bên B</button>
+    <span class="hint" id="status">Sẵn sàng</span>
+    <button class="btn-export" id="exportBtn" type="button">⬇ Xuất file Word (.docx)</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="vendor/docx-bundle.js"></script>
+<script>
+// ===== Build .docx cho HĐ Dịch vụ cá nhân (HKD Phan Thị Thủy là Bên A) =====
+function buildHDDV(data, D) {
+  const { Document, Paragraph, TextRun, Table, TableRow, TableCell,
+    AlignmentType, WidthType, BorderStyle, VerticalAlign } = D;
+  const FONT = "Times New Roman", SZ = 26, SZH = 28;
+  const center = AlignmentType.CENTER, just = AlignmentType.JUSTIFIED;
+
+  const run = (t, o={}) => new TextRun({ text: t==null?"":String(t), font:FONT, size:o.size||SZ, bold:!!o.bold, italics:!!o.italics });
+  const P = (kids, o={}) => new Paragraph({ children: Array.isArray(kids)?kids:[kids], alignment:o.align, spacing:{ after:o.after==null?60:o.after, line:276 } });
+  const line = (t, o={}) => P([run(t, o)], o);
+  const blank = () => P([run("")], { after:0 });
+
+  function signTable(L, R){
+    const nb = { style: BorderStyle.NONE, size:0, color:"FFFFFF" };
+    const cellBorders = { top:nb, bottom:nb, left:nb, right:nb };
+    const cell = (l1) => new TableCell({
+      width:{size:4680,type:WidthType.DXA}, borders:cellBorders,
+      margins:{top:40,bottom:40,left:80,right:80},
+      children:[
+        new Paragraph({ alignment:center, spacing:{after:0}, children:[run(l1,{bold:true})] }),
+        new Paragraph({ alignment:center, spacing:{after:0}, children:[run("(ký và ghi rõ họ tên, đóng dấu)",{italics:true})] })
+      ]
+    });
+    return new Table({
+      width:{size:9360,type:WidthType.DXA}, columnWidths:[4680,4680],
+      borders:{ top:nb, bottom:nb, left:nb, right:nb, insideHorizontal:nb, insideVertical:nb },
+      rows:[ new TableRow({ children:[cell(L), cell(R)] }) ]
+    });
+  }
+
+  const hd = data.hd, a = data.a, b = data.b, nd = data.nd, tl = data.tl, bk = data.bk;
+  const children = [];
+
+  children.push(line("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", { bold:true, align:center, after:0 }));
+  children.push(line("Độc lập – Tự do – Hạnh phúc", { bold:true, align:center }));
+  children.push(blank());
+  children.push(line("HỢP ĐỒNG DỊCH VỤ CÁ NHÂN", { bold:true, align:center, size:SZH, after:0 }));
+  children.push(line(`(Số ${hd.so || "……/20…/HĐ-…"})`, { italics:true, align:center }));
+  children.push(blank());
+
+  children.push(line("– Căn cứ Bộ Luật Dân sự 2015 số 91/2015/QH13 nước CHXHCN Việt Nam", { italics:true, after:0 }));
+  children.push(line("– Căn cứ yêu cầu của bên thuê dịch vụ và khả năng cung cấp dịch vụ của bên cung cấp dịch vụ", { italics:true }));
+  children.push(blank());
+
+  const dKy = `Hôm nay, ngày ${hd.ngay||"…"} tháng ${hd.thang||"…"} năm ${hd.nam||"……"}, tại ${hd.diadiem||"……………"}`;
+  children.push(line(dKy));
+  children.push(line("Chúng tôi gồm có:", { after:0 }));
+  children.push(blank());
+
+  // BÊN A
+  children.push(P([run("Bên thuê dịch vụ (Bên A):", { bold:true })]));
+  children.push(P([run("Người đại diện: ", { bold:true }), run(a.daidien)]));
+  children.push(P([run("Địa chỉ: ", { bold:true }), run(a.diachi)]));
+  children.push(P([run("Mã số thuế: ", { bold:true }), run(a.mst)]));
+  children.push(blank());
+  // BÊN B
+  children.push(P([run("Bên cung cấp dịch vụ (Bên B):", { bold:true })]));
+  children.push(P([run("Người đại diện: ", { bold:true }), run(b.daidien)]));
+  children.push(P([run("Địa chỉ: ", { bold:true }), run(b.diachi)]));
+  children.push(P([run("Điện thoại: ", { bold:true }), run(b.sdt)]));
+  children.push(blank());
+
+  children.push(line("Sau khi bàn bạc, thảo luận, hai bên nhất trí ký kết hợp đồng dịch vụ với các điều khoản sau:", { align: just }));
+  children.push(blank());
+
+  // ĐIỀU 1
+  children.push(line("Điều 1. Nội dung vụ việc và các dịch vụ", { bold:true }));
+  children.push(P([ run("1.1. Nội dung vụ việc: ", { bold:true }), run(nd.noidung) ], { align:just }));
+  const thStr = (nd.tu && nd.den) ? `${nd.tu} đến ${nd.den}` : "…/…/20… đến …/…/20…";
+  const dayPart = nd.days ? ` (trong vòng ${nd.days} ngày)` : "";
+  children.push(P([ run("1.2. Thời hạn thực hiện hợp đồng: ", { bold:true }), run(`${thStr}${dayPart}`) ], { align:just }));
+  children.push(blank());
+
+  // ĐIỀU 2
+  children.push(line("Điều 2. Thù lao, chi phí và phương thức thanh toán", { bold:true }));
+  children.push(P([ run("Tổng giá trị hợp đồng: ", { bold:true }), run(`${tl.tongStr || "……………"} VNĐ`) ]));
+  children.push(P([ run("Thuế thu nhập cá nhân (TNCN) 10%: ", { bold:true }), run(`${tl.thueStr || "……………"} VNĐ`) ]));
+  children.push(P([ run("Số tiền Bên A thanh toán thực tế cho Bên B sau khi khấu trừ 10% thuế TNCN: ", { bold:true }), run(`${tl.thucnhanStr || "……………"} VNĐ`) ]));
+  if (tl.bangchu) children.push(P([ run("(Bằng chữ: ", { italics:true }), run(tl.bangchu, { italics:true }), run(")", { italics:true }) ]));
+  children.push(P([ run("2.3. Phương thức và thời hạn thanh toán thù lao: ", { bold:true }),
+    run(`Thanh toán bằng chuyển khoản trong vòng ${tl.songay || "……"} ngày kể từ ngày hai bên ký nghiệm thu hợp đồng.`) ], { align:just }));
+  children.push(P([ run("2.4. Thông tin tài khoản thụ hưởng:", { bold:true }) ]));
+  children.push(P([ run("Tên tài khoản: ", { bold:true }), run(bk.ten) ]));
+  children.push(P([ run("Số tài khoản: ", { bold:true }), run(bk.so), run(" tại Ngân hàng: "), run(bk.nh), run(bk.cn ? ` – Chi nhánh ${bk.cn}` : "") ]));
+  children.push(P([ run("2.5. Thoả thuận khác về thù lao: ", { bold:true }),
+    run("Bên A sẽ khấu trừ 10% thuế TNCN trước khi thanh toán cho Bên B theo quy định của nhà nước.") ], { align:just }));
+  children.push(blank());
+
+  // ĐIỀU 3
+  children.push(line("Điều 3. Quyền và nghĩa vụ của Bên A", { bold:true }));
+  children.push(line("3.1. Bên A có quyền:", { bold:true, italics:true, after:0 }));
+  [
+    "Yêu cầu Bên B thực hiện các dịch vụ đã thoả thuận với tinh thần nhiệt tình, trách nhiệm và đảm bảo quyền lợi chính đáng cho Bên A.",
+    "Đơn phương chấm dứt hợp đồng và yêu cầu Bên B bồi thường thiệt hại đối với những thiệt hại thực tế xảy ra nếu Bên B vi phạm nghiêm trọng các nghĩa vụ đã thoả thuận.",
+    "Đơn phương chấm dứt hợp đồng nếu xét thấy việc thực hiện công việc không mang lại lợi ích cho Bên A nhưng phải thông báo bằng văn bản cho Bên B biết trước 15 ngày, đồng thời phải thanh toán cho Bên B các khoản thù lao, chi phí theo thoả thuận tại Điều 2 Hợp đồng này."
+  ].forEach(t => children.push(line("- " + t, { align:just, after:30 })));
+  children.push(line("3.2. Bên A có nghĩa vụ:", { bold:true, italics:true, after:0 }));
+  [
+    "Đảm bảo các thông tin, tài liệu do Bên A cung cấp cho Bên B là sự thật.",
+    "Thanh toán tiền thù lao, chi phí cho Bên B theo thoả thuận tại Điều 2 Hợp đồng này.",
+    "Cung cấp kịp thời các thông tin, tài liệu, phương tiện cần thiết để Bên B thực hiện công việc.",
+    "Thanh toán thù lao và chi phí theo thoả thuận tại Điều 2 Hợp đồng này và bồi thường các thiệt hại thực tế xảy ra cho Bên B nếu Bên A đơn phương chấm dứt hợp đồng trái pháp luật."
+  ].forEach(t => children.push(line("- " + t, { align:just, after:30 })));
+  children.push(blank());
+
+  // ĐIỀU 4
+  children.push(line("Điều 4. Quyền và nghĩa vụ của Bên B", { bold:true }));
+  children.push(line("4.1. Quyền của Bên B:", { bold:true, italics:true, after:0 }));
+  [
+    "Yêu cầu Bên A thanh toán thù lao theo thoả thuận.",
+    "Yêu cầu Bên A cung cấp các thông tin, tài liệu, chứng cứ, phương tiện cần thiết để thực hiện công việc.",
+    "Yêu cầu Bên A thanh toán thù lao và bồi thường những thiệt hại thực tế xảy ra cho Bên B nếu Bên A đơn phương chấm dứt hợp đồng trái pháp luật."
+  ].forEach(t => children.push(line("- " + t, { align:just, after:30 })));
+  children.push(line("4.2. Nghĩa vụ của Bên B:", { bold:true, italics:true, after:0 }));
+  [
+    "Không được giao cho tổ chức, cá nhân khác thực hiện công việc nếu không có sự đồng ý bằng văn bản của Bên A.",
+    "Thực hiện công việc đã thoả thuận với tinh thần nhiệt tình, trách nhiệm để đảm bảo các quyền lợi chính đáng cho Bên A.",
+    "Giữ bí mật các thông tin, tài liệu, chứng cứ hoặc sự kiện liên quan đến Bên A mà Bên B biết được trong quá trình thực hiện công việc.",
+    "Thông báo kịp thời cho Bên A về mọi vấn đề liên quan đến quá trình thực hiện công việc.",
+    "Bồi thường thiệt hại cho Bên A nếu làm mất mát, hư hỏng tài liệu hoặc tiết lộ thông tin trái thoả thuận.",
+    "Bồi thường thiệt hại cho Bên A nếu đơn phương chấm dứt hợp đồng trái pháp luật.",
+    "Tiền bồi thường thiệt hại sẽ tùy theo mức độ thiệt hại thực tế và thỏa thuận giữa hai bên tại thời điểm phát sinh."
+  ].forEach(t => children.push(line("- " + t, { align:just, after:30 })));
+  children.push(blank());
+
+  // ĐIỀU 6 (theo mẫu gốc, không có Điều 5)
+  children.push(line("Điều 5. Điều khoản chung", { bold:true }));
+  children.push(line("5.1. Hai bên cam kết thực hiện đúng các thoả thuận trong hợp đồng. Những điều khoản không có trong hợp đồng được thực hiện theo các luật viện dẫn trong Hợp đồng này và các văn bản hướng dẫn của các luật đó.", { align:just }));
+  children.push(line("5.2. Nếu phát sinh tranh chấp về hợp đồng, các bên sẽ tiến hành thương lượng, thoả thuận. Nếu không thoả thuận được, một trong các bên có quyền khởi kiện theo quy định của pháp luật.", { align:just }));
+  children.push(line("5.3. Hợp đồng được lập thành 02 bản, các bản có nội dung và giá trị pháp lý như nhau, mỗi bên giữ 01 bản.", { align:just }));
+  const dHL = (hd.ngay && hd.thang && hd.nam) ? `${hd.ngay}/${hd.thang}/${hd.nam}` : "…/…/20…";
+  children.push(line(`5.4. Hợp đồng có hiệu lực kể từ ngày ${dHL}.`, { align:just }));
+  children.push(blank());
+
+  children.push(signTable("ĐẠI DIỆN BÊN A", "ĐẠI DIỆN BÊN B"));
+
+  return new Document({
+    styles: { default: { document: { run: { font: FONT, size: SZ } } } },
+    sections: [{
+      properties: { page: { size:{width:11906,height:16838}, margin:{top:1134,right:1134,bottom:1134,left:1418,header:567,footer:567} } },
+      children
+    }]
+  });
+}
+</script>
+
+<script>(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const toastEl = $("toast"), statusEl = $("status");
+  const toast = (m, err) => { toastEl.textContent=m; toastEl.className="toast show"+(err?" err":""); setTimeout(()=>toastEl.className="toast", 2600); };
+  const setStatus = t => statusEl.textContent = t;
+  const store = (k,v) => { try{ localStorage.setItem(k,v); }catch(e){} };
+  const load = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
+
+  const DEFAULT_A = {
+    daidien: "Hộ Kinh doanh Phan Thị Thủy",
+    diachi:  "Số nhà 3, ngách 36, ngõ 156, phố Sở Thượng, Phường Hoàng Mai, TP Hà Nội",
+    mst:     "040183007304"
+  };
+  function fillA(a){ $("a_daidien").value=a.daidien; $("a_diachi").value=a.diachi; $("a_mst").value=a.mst; }
+  (function(){ const s=load("hddv_A"); try{ fillA(s?JSON.parse(s):DEFAULT_A); }catch(e){ fillA(DEFAULT_A); } })();
+
+  // collapse toggle
+  document.querySelectorAll(".chev").forEach(c => {
+    c.addEventListener("click", ()=>{
+      const card = $(c.getAttribute("data-toggle"));
+      card.classList.toggle("collapsed");
+      c.textContent = card.classList.contains("collapsed") ? "Sửa ▾" : "Thu gọn ▴";
+    });
+  });
+
+  // ---- format số ----
+  const onlyDigits = s => (s||"").replace(/[^\d]/g,"");
+  const fmt = n => {
+    if (n===""||n==null||isNaN(n)) return "";
+    return Number(n).toLocaleString("en-US").replace(/,/g,",");
+  };
+  const tongEl = $("tl_tong");
+  tongEl.addEventListener("input", ()=>{
+    const raw = onlyDigits(tongEl.value);
+    tongEl.value = raw ? fmt(raw) : "";
+    recalc();
+  });
+
+  function recalc(){
+    const tong = Number(onlyDigits(tongEl.value)) || 0;
+    const thue = Math.round(tong*0.1);
+    const tn = tong - thue;
+    $("tl_thue").textContent      = tong ? (fmt(thue) + " VNĐ") : "— VNĐ";
+    $("tl_thucnhan").textContent  = tong ? (fmt(tn)   + " VNĐ") : "— VNĐ";
+  }
+
+  // ---- thời hạn → số ngày ----
+  function toDate(d,m,y){
+    d=+d; m=+m; y=+y;
+    if(!d||!m||!y) return null;
+    const dt = new Date(y, m-1, d);
+    return (dt.getFullYear()===y && dt.getMonth()===m-1 && dt.getDate()===d) ? dt : null;
+  }
+  function recalcDays(){
+    const d1 = toDate($("th_tu_ngay").value, $("th_tu_thang").value, $("th_tu_nam").value);
+    const d2 = toDate($("th_den_ngay").value, $("th_den_thang").value, $("th_den_nam").value);
+    if(d1 && d2 && d2>=d1){
+      const days = Math.round((d2-d1)/86400000) + 1;
+      $("th_days").textContent = days + " ngày";
+    } else {
+      $("th_days").textContent = "— ngày";
+    }
+  }
+  ["th_tu_ngay","th_tu_thang","th_tu_nam","th_den_ngay","th_den_thang","th_den_nam"].forEach(id => $(id).addEventListener("input", recalcDays));
+
+  // ---- gather ----
+  const val = id => { const e=$(id); return e ? e.value.trim() : ""; };
+  function gather(){
+    const tong = Number(onlyDigits(val("tl_tong"))) || 0;
+    const thue = Math.round(tong*0.1);
+    const tn = tong - thue;
+    const d1 = toDate(val("th_tu_ngay"), val("th_tu_thang"), val("th_tu_nam"));
+    const d2 = toDate(val("th_den_ngay"), val("th_den_thang"), val("th_den_nam"));
+    const days = (d1 && d2 && d2>=d1) ? Math.round((d2-d1)/86400000)+1 : "";
+    const fmtD = d => `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+    return {
+      hd: { so:val("hd_so"), ngay:val("hd_ngay"), thang:val("hd_thang"), nam:val("hd_nam"), diadiem:val("hd_diadiem") || "Hà Nội" },
+      a:  { daidien:val("a_daidien"), diachi:val("a_diachi"), mst:val("a_mst") },
+      b:  { daidien:val("b_daidien"), diachi:val("b_diachi"), sdt:val("b_sdt") },
+      nd: { noidung:val("nd_noidung"), tu: d1?fmtD(d1):"", den: d2?fmtD(d2):"", days },
+      tl: { tongStr: tong?fmt(tong):"", thueStr: tong?fmt(thue):"", thucnhanStr: tong?fmt(tn):"", bangchu:val("tl_bangchu"), songay:val("tl_songay") },
+      bk: { ten:val("bk_ten"), so:val("bk_so"), nh:val("bk_nh"), cn:val("bk_cn") }
+    };
+  }
+
+  function slug(s){
+    return (s||"").normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/đ/g,"d").replace(/Đ/g,"D")
+      .replace(/[^A-Za-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40) || "BenB";
+  }
+  function download(blob, name){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1500);
+  }
+
+  $("exportBtn").addEventListener("click", ()=>{
+    const data = gather();
+    if (!data.b.daidien) { toast("Chưa nhập tên Bên B", true); $("b_daidien").focus(); return; }
+    if (!data.nd.noidung) { toast("Chưa nhập nội dung vụ việc", true); $("nd_noidung").focus(); return; }
+    store("hddv_A", JSON.stringify(data.a));
+    setStatus("Đang tạo file…");
+    try{
+      const doc = buildHDDV(data, window.docx);
+      window.docx.Packer.toBlob(doc).then(blob => {
+        const dpart = data.hd.ngay ? `${data.hd.ngay}-${data.hd.thang}-${data.hd.nam}` : "";
+        const name = "HopDongDV_" + slug(data.b.daidien) + (dpart?"_"+dpart:"") + ".docx";
+        download(blob, name);
+        setStatus("Đã tạo xong");
+        toast("Đã xuất file: " + name);
+      }).catch(err => { console.error(err); setStatus("Lỗi"); toast("Lỗi khi tạo file: " + err.message, true); });
+    }catch(err){ console.error(err); setStatus("Lỗi"); toast("Lỗi: " + err.message, true); }
+  });
+
+  $("resetBtn").addEventListener("click", ()=>{
+    ["b_daidien","b_diachi","b_sdt","hd_so","hd_ngay","hd_thang","hd_nam","nd_noidung",
+     "th_tu_ngay","th_tu_thang","th_tu_nam","th_den_ngay","th_den_thang","th_den_nam",
+     "tl_tong","tl_songay","tl_bangchu","bk_ten","bk_so","bk_nh","bk_cn"].forEach(id => $(id).value="");
+    recalc(); recalcDays();
+    toast("Đã xóa thông tin Bên B");
+    $("b_daidien").focus();
+  });
+})();
+</script>
+</body>
+</html>

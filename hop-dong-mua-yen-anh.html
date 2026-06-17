@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HĐ mua hàng + BB bàn giao — Yến Anh Quality Co</title>
+<style>
+  :root{
+    --bg:#eaeef1; --panel:#ffffff; --ink:#11333f; --ink-soft:#4d6470;
+    --line:#d7dee3; --line-soft:#e7ecef; --field:#f7f9fa;
+    --teal:#0f5566; --teal-d:#0b3f4c; --seal:#b5402f; --seal-soft:#f4e3df;
+    --ok:#1f7a4d; --shadow:0 1px 2px rgba(17,51,63,.06),0 8px 24px rgba(17,51,63,.07);
+    --r:12px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:15px; line-height:1.5; padding-bottom:96px;
+  }
+  .serif{font-family:Cambria,"Times New Roman",Georgia,serif}
+
+  header.bar{
+    background:linear-gradient(180deg,#0f5566,#0b3f4c);
+    color:#eaf3f5; padding:22px 20px; position:relative; overflow:hidden;
+  }
+  header.bar .wrap{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px}
+  .seal{
+    flex:0 0 auto;width:54px;height:54px;border-radius:50%;
+    border:2px solid var(--seal); color:var(--seal);
+    display:grid;place-items:center;font-weight:700;font-size:11px;text-align:center;
+    background:#fff; line-height:1.05; transform:rotate(-8deg);
+    box-shadow:0 0 0 4px rgba(181,64,47,.12);
+  }
+  header.bar h1{margin:0;font-size:22px;letter-spacing:.2px}
+  header.bar p{margin:3px 0 0;font-size:13px;color:#bcd4d9}
+
+  main{max-width:920px;margin:22px auto;padding:0 16px;display:flex;flex-direction:column;gap:18px}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .card>.head{
+    display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:default;
+    border-bottom:1px solid var(--line-soft);background:#fbfcfd;
+  }
+  .card>.head .ix{
+    flex:0 0 auto;width:26px;height:26px;border-radius:7px;background:var(--teal);color:#fff;
+    display:grid;place-items:center;font-size:13px;font-weight:700
+  }
+  .card>.head h2{margin:0;font-size:16px}
+  .card>.head .note{margin-left:auto;font-size:12.5px;color:var(--ink-soft)}
+  .card>.body{padding:16px 18px}
+
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin:0 0 5px}
+  input[type=text]{
+    width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
+    background:var(--field);color:var(--ink);font-size:15px;font-family:inherit;
+  }
+  input[type=text]:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(15,85,102,.12)}
+  .field{margin-bottom:13px}
+  .field:last-child{margin-bottom:0}
+  .grid{display:grid;gap:13px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .dmy{grid-template-columns:1fr 1fr 1.2fr}
+  @media(max-width:620px){.g2,.g3{grid-template-columns:1fr}}
+
+  .toggle{display:flex;align-items:center;gap:9px;margin-left:auto;font-size:13px;color:var(--ink-soft);font-weight:600}
+  .toggle input{width:18px;height:18px;accent-color:var(--teal)}
+
+  .collapsed .body{display:none}
+  .chev{margin-left:8px;color:var(--ink-soft);cursor:pointer;user-select:none;font-size:13px;font-weight:600}
+
+  /* goods table */
+  .bb{border:1px solid var(--line);border-radius:11px;padding:14px;margin-bottom:14px;background:#fff}
+  .bb .bbtop{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .bb .bbtop .tag{font-weight:700;color:var(--teal-d)}
+  .bb .rmbb{margin-left:auto}
+  table.goods{width:100%;border-collapse:collapse;margin-top:4px}
+  table.goods th{font-size:12px;color:var(--ink-soft);text-align:left;padding:0 6px 6px;font-weight:600}
+  table.goods td{padding:3px 4px;vertical-align:top}
+  table.goods input{font-size:14px;padding:7px 9px}
+  td.rmcell{width:34px;text-align:center;vertical-align:middle}
+
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:9px}
+  .btn-soft{background:var(--seal-soft);color:var(--seal);font-weight:600;padding:8px 12px;font-size:13.5px;border:1px solid #e9c9c2}
+  .btn-soft:hover{background:#efd6d1}
+  .btn-add{background:#eaf2f1;color:var(--teal-d);font-weight:600;padding:9px 13px;font-size:14px;border:1px dashed var(--teal)}
+  .btn-add:hover{background:#dcebe9}
+  .iconx{background:transparent;color:#b04a3c;font-size:18px;line-height:1;padding:4px 8px;border-radius:7px}
+  .iconx:hover{background:#fbeae7}
+
+  .actionbar{
+    position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);
+    backdrop-filter:blur(6px);border-top:1px solid var(--line);
+    padding:12px 16px;z-index:30
+  }
+  .actionbar .wrap{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:14px}
+  .actionbar .hint{font-size:12.5px;color:var(--ink-soft)}
+  .btn-export{
+    margin-left:auto;background:var(--teal);color:#fff;font-weight:700;font-size:16px;
+    padding:13px 24px;border-radius:11px;display:inline-flex;align-items:center;gap:9px;
+    box-shadow:0 6px 16px rgba(15,85,102,.28)
+  }
+  .btn-export:hover{background:var(--teal-d)}
+  .btn-export:active{transform:translateY(1px)}
+  .btn-ghost{background:#eef2f4;color:var(--ink);font-weight:600;padding:11px 16px;border:1px solid var(--line)}
+  .btn-ghost:hover{background:#e3e9ec}
+
+  .toast{
+    position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;
+    opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:var(--shadow)
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{background:var(--seal)}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <div class="seal serif">HĐ<br>NT</div>
+    <div style="flex:1">
+      <h1 class="serif">Hợp đồng nguyên tắc + Biên bản bàn giao</h1>
+      <p>Yến Anh Quality Co (Bên mua) · điền thông tin đối tác bán hàng → xuất Word.</p>
+    </div>
+    <a href="index.html" style="color:#eaf3f5;text-decoration:none;border:1px solid rgba(255,255,255,.3);padding:8px 14px;border-radius:8px;font-size:14px;white-space:nowrap">← Chọn mẫu khác</a>
+  </div>
+</header>
+
+<main>
+  <!-- BÊN A = BÊN BÁN = ĐỐI TÁC (thay đổi mỗi lần) -->
+  <section class="card" id="cardA">
+    <div class="head">
+      <span class="ix">A</span>
+      <h2>Bên bán (Bên A) — <span style="font-weight:400;color:var(--ink-soft)">đối tác / nhà cung cấp</span></h2>
+      <span class="note">Điền mới mỗi lần</span>
+    </div>
+    <div class="body">
+      <div class="field"><label>Tên (Hộ kinh doanh / Công ty)</label><input type="text" id="a_ten" placeholder="VD: HỘ KINH DOANH - NGUYỄN THỊ HIÊN 1975"></div>
+      <div class="grid g2">
+        <div class="field"><label>Người đại diện</label><input type="text" id="a_daidien" placeholder="VD: NGUYỄN THỊ HIÊN"></div>
+        <div class="field"><label>Chức vụ</label><input type="text" id="a_chucvu" placeholder="VD: Chủ hộ kinh doanh"></div>
+      </div>
+      <div class="field"><label>Địa chỉ</label><input type="text" id="a_diachi" placeholder="Địa chỉ đối tác (cũng là nơi bàn giao hàng)"></div>
+      <div class="field"><label>Mã số thuế</label><input type="text" id="a_mst"></div>
+    </div>
+  </section>
+
+  <!-- BÊN B = BÊN MUA = CÔNG TY MÌNH (cố định) -->
+  <section class="card collapsed" id="cardB">
+    <div class="head">
+      <span class="ix">B</span>
+      <h2>Bên mua (Bên B) — <span style="font-weight:400;color:var(--ink-soft)">công ty của mình</span></h2>
+      <span class="note">Cố định · đã lưu sẵn</span>
+      <span class="chev" data-toggle="cardB">Sửa ▾</span>
+    </div>
+    <div class="body">
+      <div class="field"><label>Tên công ty</label><input type="text" id="b_ten"></div>
+      <div class="grid g2">
+        <div class="field"><label>Người đại diện</label><input type="text" id="b_daidien"></div>
+        <div class="field"><label>Chức vụ</label><input type="text" id="b_chucvu"></div>
+      </div>
+      <div class="field"><label>Địa chỉ</label><input type="text" id="b_diachi"></div>
+      <div class="field"><label>Mã số thuế</label><input type="text" id="b_mst"></div>
+    </div>
+  </section>
+
+  <!-- HỢP ĐỒNG -->
+  <section class="card" id="cardHD">
+    <div class="head">
+      <span class="ix">1</span>
+      <h2>Hợp đồng nguyên tắc</h2>
+      <label class="toggle"><input type="checkbox" id="hd_include" checked> Xuất phần này</label>
+    </div>
+    <div class="body">
+      <div class="grid g2">
+        <div class="field"><label>Số hợp đồng</label><input type="text" id="hd_so" placeholder="VD: 05/HĐNT/YA/2026"></div>
+        <div class="field"><label>Số ngày thanh toán (chậm nhất)</label><input type="text" id="hd_tt" placeholder="VD: 30"></div>
+      </div>
+      <label>Ngày ký hợp đồng</label>
+      <div class="grid dmy">
+        <input type="text" id="hd_ngay" placeholder="Ngày">
+        <input type="text" id="hd_thang" placeholder="Tháng">
+        <input type="text" id="hd_nam" placeholder="Năm (VD: 2026)">
+      </div>
+    </div>
+  </section>
+
+  <!-- BIÊN BẢN -->
+  <section class="card" id="cardBB">
+    <div class="head">
+      <span class="ix">2</span>
+      <h2>Biên bản bàn giao hàng hóa</h2>
+      <span class="note">Có thể thêm nhiều biên bản</span>
+    </div>
+    <div class="body">
+      <div id="bbList"></div>
+      <button class="btn-add" id="addBB" type="button">+ Thêm một biên bản bàn giao</button>
+    </div>
+  </section>
+</main>
+
+<div class="actionbar">
+  <div class="wrap">
+    <button class="btn-ghost" id="resetBtn" type="button">Xóa thông tin đối tác</button>
+    <span class="hint" id="status">Sẵn sàng</span>
+    <button class="btn-export" id="exportBtn" type="button">⬇ Xuất file Word (.docx)</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Mẫu một dòng hàng hóa -->
+<template id="rowTpl">
+  <tr class="grow">
+    <td><input type="text" class="g_ten" placeholder="Tên hàng hóa"></td>
+    <td style="width:90px"><input type="text" class="g_dv" placeholder="ĐVT"></td>
+    <td style="width:120px"><input type="text" class="g_sl" placeholder="Số lượng"></td>
+    <td style="width:150px"><input type="text" class="g_tt" placeholder="Đạt tiêu chuẩn"></td>
+    <td class="rmcell"><button type="button" class="iconx rmrow" title="Xóa dòng">×</button></td>
+  </tr>
+</template>
+
+<!-- Mẫu một biên bản -->
+<template id="bbTpl">
+  <div class="bb">
+    <div class="bbtop">
+      <span class="tag">Biên bản #<span class="bbnum"></span></span>
+      <button type="button" class="btn-soft rmbb">Xóa biên bản</button>
+    </div>
+    <div class="grid g2">
+      <div class="field"><label>Số biên bản</label><input type="text" class="bb_so" placeholder="VD: 00000026/BBBG"></div>
+      <div class="field">
+        <label>Ngày lập biên bản</label>
+        <div class="grid dmy">
+          <input type="text" class="bb_ngay" placeholder="Ngày">
+          <input type="text" class="bb_thang" placeholder="Tháng">
+          <input type="text" class="bb_nam" placeholder="Năm">
+        </div>
+      </div>
+    </div>
+    <label>Danh mục hàng hóa</label>
+    <table class="goods">
+      <thead><tr><th>Tên hàng hóa/Thiết bị</th><th>Đơn vị</th><th>Số lượng</th><th>Tình trạng</th><th></th></tr></thead>
+      <tbody class="rows"></tbody>
+    </table>
+    <button type="button" class="btn-add addRow" style="margin-top:8px;padding:7px 11px;font-size:13px">+ Thêm dòng hàng</button>
+  </div>
+</template>
+
+<script src="vendor/docx-bundle.js"></script>
+<script>// ===== Thư viện tạo Hợp đồng + Biên bản bàn giao =====
+// Dùng được cả Node (truyền docx qua require) lẫn trình duyệt (window.docx)
+function buildDocument(data, D) {
+  const {
+    Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
+    AlignmentType, WidthType, BorderStyle, ShadingType, VerticalAlign, PageBreak
+  } = D;
+
+  const FONT = "Times New Roman";
+  const SZ = 26;   // 13pt
+  const SZH = 28;  // 14pt cho tiêu đề lớn
+
+  // ---- helper tạo run ----
+  const run = (text, opts = {}) => new TextRun({
+    text: text == null ? "" : String(text),
+    font: FONT, size: opts.size || SZ,
+    bold: !!opts.bold, italics: !!opts.italics, ...opts
+  });
+
+  // đoạn văn nhiều run
+  const P = (children, opts = {}) => new Paragraph({
+    children: Array.isArray(children) ? children : [children],
+    alignment: opts.align,
+    spacing: { after: opts.after == null ? 60 : opts.after, line: 276 },
+    ...opts.p
+  });
+
+  // đoạn 1 dòng text đơn giản
+  const line = (text, opts = {}) => P([run(text, opts)], opts);
+  const blank = () => P([run("")], { after: 0 });
+
+  // đoạn có nhãn đậm + giá trị thường: "Nhãn: giá trị"
+  const labelVal = (label, value, opts = {}) => P([
+    run(label, { bold: true }),
+    run(value || "", { bold: !!opts.boldValue })
+  ], opts);
+
+  const center = AlignmentType.CENTER;
+  const just = AlignmentType.JUSTIFIED;
+
+  // ====== KHỐI THÔNG TIN 2 BÊN (dùng chung cho HĐ và Biên bản) ======
+  function partyBlock(a, b, labelA, labelB) {
+    const out = [];
+    // Bên A
+    out.push(P([run(labelA + ": ", { bold: true }), run(a.ten, { bold: true })]));
+    out.push(P([
+      run("Đại diện Ông/Bà: ", { bold: true }),
+      run(a.daidien, { bold: true }),
+      run("        Chức vụ: ", { bold: true }),
+      run(a.chucvu, { bold: true })
+    ]));
+    out.push(P([run("Địa chỉ: ", { bold: true }), run(a.diachi)]));
+    out.push(P([run("Mã số thuế: ", { bold: true }), run(a.mst)]));
+    out.push(blank());
+    // Bên B
+    out.push(P([run(labelB + ": ", { bold: true }), run(b.ten, { bold: true })]));
+    out.push(P([
+      run("Đại diện Ông/Bà: ", { bold: true }),
+      run(b.daidien, { bold: true }),
+      run("        Chức vụ: ", { bold: true }),
+      run(b.chucvu, { bold: true })
+    ]));
+    out.push(P([run("Địa chỉ: ", { bold: true }), run(b.diachi)]));
+    out.push(P([run("Mã số thuế: ", { bold: true }), run(b.mst)]));
+    return out;
+  }
+
+  // ====== BẢNG CHỮ KÝ 2 BÊN ======
+  function signTable(left, right) {
+    const noBorder = { style: BorderStyle.NONE, size: 0, color: "FFFFFF" };
+    const borders = { top: noBorder, bottom: noBorder, left: noBorder, right: noBorder,
+      insideHorizontal: noBorder, insideVertical: noBorder };
+    const cell = (l1) => new TableCell({
+      width: { size: 4680, type: WidthType.DXA },
+      borders: { top: noBorder, bottom: noBorder, left: noBorder, right: noBorder },
+      margins: { top: 40, bottom: 40, left: 80, right: 80 },
+      children: [
+        new Paragraph({ alignment: center, spacing: { after: 0 },
+          children: [run(l1, { bold: true })] }),
+        new Paragraph({ alignment: center, spacing: { after: 0 },
+          children: [run("(Ký tên, đóng dấu)", { italics: true })] })
+      ]
+    });
+    return new Table({
+      width: { size: 9360, type: WidthType.DXA },
+      columnWidths: [4680, 4680],
+      borders,
+      rows: [ new TableRow({ children: [cell(left), cell(right)] }) ]
+    });
+  }
+
+  const children = [];
+
+  // ============================================================
+  // PHẦN 1: HỢP ĐỒNG NGUYÊN TẮC
+  // ============================================================
+  if (data.hopdong && data.hopdong.include) {
+    const hd = data.hopdong;
+    children.push(line("CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM", { bold: true, align: center, after: 0 }));
+    children.push(line("Độc Lập - Tự Do - Hạnh Phúc", { bold: true, align: center, after: 0 }));
+    children.push(line("------***------", { align: center }));
+    children.push(blank());
+    children.push(line("HỢP ĐỒNG NGUYÊN TẮC", { bold: true, align: center, size: SZH, after: 0 }));
+    children.push(line("(Về việc mua bán hàng hóa)", { bold: true, italics: true, align: center }));
+    const soHD = "Số: " + (hd.so || "……/HĐNT/YA/………");
+    children.push(line(soHD, { bold: true, italics: true, align: center }));
+    children.push(blank());
+
+    children.push(line("- Căn cứ Bộ luật dân sự số 91/2015/QH13, có hiệu lực từ ngày 01/01/2017", { italics: true, after: 0 }));
+    children.push(line("- Căn cứ Luật thương mại số 36/2005/QH11, có hiệu lực từ ngày 01/01/2006", { italics: true, after: 0 }));
+    children.push(line("- Căn cứ vào nhu cầu và khả năng cung ứng của các bên dưới đây.", { italics: true }));
+    children.push(blank());
+    const dHD = `Hôm nay ngày ${hd.ngay || "…"} tháng ${hd.thang || "…"} năm ${hd.nam || "……"}; Chúng tôi gồm có:`;
+    children.push(line(dHD, { italics: true }));
+    children.push(blank());
+
+    partyBlock(data.ben_a, data.ben_b, "BÊN BÁN (BÊN A)", "BÊN MUA (BÊN B)").forEach(p => children.push(p));
+    children.push(blank());
+    children.push(line("Sau khi trao đổi bàn bạc, hai bên thống nhất kí kết hợp đồng nguyên tắc bán hàng theo những điều kiện và điều khoản cụ thể như sau:", { align: just }));
+    children.push(blank());
+
+    // Điều I
+    children.push(line("Điều I: HÀNG HÓA, DỊCH VỤ", { bold: true }));
+    children.push(line("1. Hàng hoá, dịch vụ", { bold: true, italics: true, after: 0 }));
+    children.push(line("- Bên A đồng ý cung cấp cho bên B các loại “vải và phụ liệu phục vụ cho ngành may mặc” theo yêu cầu của bên B và với khả năng của bên A.", { align: just }));
+    children.push(line("2. Số lượng và loại hàng", { bold: true, italics: true, after: 0 }));
+    children.push(line("- Số lượng và loại hàng hóa được thể hiện trên Biên bản bàn giao hàng hoá do hai bên xác nhận.", { align: just, after: 0 }));
+    children.push(line("- Bên B đặt hàng Bên A với số lượng, chủng loại hàng hóa cụ thể thông qua các hình thức như: điện thoại, fax, e-mail…", { align: just, after: 0 }));
+    children.push(line("- Trong trường hợp đơn hàng có phát sinh sản phẩm không thông dụng, khó hoặc ít tiêu thụ; hai bên phải bàn bạc và đưa ra phương thức, điều khoản riêng cho mỗi đơn hàng (có thể lập riêng hợp đồng mua bán hàng hóa hoặc đơn đặt hàng được hai bên xác nhận rõ điều kiện).", { align: just }));
+    children.push(line("3. Đơn giá", { bold: true, italics: true, after: 0 }));
+    children.push(line("- Đơn giá hai bên thống nhất được thể hiện trên biên bản xác nhận khối lượng kiêm công nợ từng lần lấy hàng để làm căn cứ thanh toán.", { align: just }));
+    children.push(blank());
+
+    // Điều II
+    children.push(line("Điều II: PHƯƠNG THỨC THANH TOÁN", { bold: true }));
+    children.push(line("- Hình thức thanh toán: bằng tiền mặt hoặc chuyển khoản", { after: 0 }));
+    children.push(line(`- Thời hạn thanh toán: Chậm nhất ${hd.sothanhtoan || "…"} ngày kể từ ngày nhận hàng.`));
+    children.push(blank());
+
+    // Điều III
+    children.push(line("Điều III: PHƯƠNG THỨC GIAO NHẬN", { bold: true }));
+    children.push(line("- Thời gian giao hàng: Chậm nhất từ 3 ngày đến 35 ngày kể từ ngày bên B đặt hàng.", { after: 0 }));
+    children.push(line("- Địa điểm giao hàng: Theo thỏa thuận giữa hai bên của từng chuyến hàng.", { after: 0 }));
+    children.push(line("- Số lượng hàng thực giao, thực nhận là căn cứ để tính giá thanh toán, làm cơ sở cho việc cấp hóa đơn GTGT.", { align: just, after: 0 }));
+    children.push(line("- Nếu có phát sinh giao nhận khác theo phương thức trên, tùy từng trường hợp cụ thể mà hai bên thống nhất về trách nhiệm thanh toán và chi phí vận chuyển.", { align: just }));
+    children.push(blank());
+
+    // Điều IV
+    children.push(line("Điều IV: TRÁCH NHIỆM CỦA CÁC BÊN", { bold: true }));
+    children.push(line("1. Trách nhiệm của bên A:", { bold: true, italics: true, after: 0 }));
+    children.push(line("- Thực hiện hợp đồng với tinh thần trách nhiệm cao, đảm bảo tiến độ như đã cam kết;", { after: 0 }));
+    children.push(line("- Giao hàng đúng chủng loại, số lượng, chất lượng và đúng thời gian, địa điểm cam kết trong hợp đồng;", { after: 0 }));
+    children.push(line("- Cung cấp hoá đơn tài chính hợp lệ, hợp pháp cho Bên B.", { after: 0 }));
+    children.push(line("- Cung cấp đầy đủ hồ sơ thanh toán gồm:", { after: 0 }));
+    children.push(line("   + Hoá đơn GTGT cho bên B theo khối lượng thực tế giao nhận", { after: 0 }));
+    children.push(line("   + Biên bản bàn giao hàng hoá", { after: 0 }));
+    children.push(line("2. Trách nhiệm của bên B:", { bold: true, italics: true, after: 0 }));
+    children.push(line("- Thông báo bằng văn bản hoặc qua điện thoại rõ nhu cầu hàng hóa tạo điều kiện cho bên A có kế hoạch cung cấp hàng;", { after: 0 }));
+    children.push(line("- Cử người có trách nhiệm để thực hiện giao dịch, kiểm nhận hàng hóa về số lượng, chủng loại và chất lượng hàng hóa;", { after: 0 }));
+    children.push(line("- Ký xác nhận đầy đủ các giấy tờ giao nhận;", { after: 0 }));
+    children.push(line("- Thanh toán đầy đủ, đúng hạn số tiền theo Điều II hợp đồng này.", { after: 0 }));
+    children.push(blank());
+
+    // Điều V
+    children.push(line("Điều V: ĐIỀU KHOẢN CHUNG", { bold: true }));
+    children.push(line("- Hai bên cam kết thực hiện nghiêm chỉnh những điều khoản ghi trên hợp đồng. Mọi thoả thuận sửa đổi, bổ sung điều khoản hợp đồng phải được thống nhất bằng văn bản mới có giá trị thực hiện.", { align: just, after: 0 }));
+    children.push(line("- Nếu có tranh chấp, trước hết hai bên giải quyết bằng hình thức thương lượng, hoà giải. Nếu tranh chấp không giải quyết được thông qua thương lượng sẽ đưa ra giải quyết tại Cơ quan Nhà nước có thẩm quyền theo quy định Pháp luật. Phán quyết của Cơ quan này buộc hai bên chấp hành. Mọi chi phí phát sinh từ việc giải quyết tranh chấp do bên thua kiện thanh toán.", { align: just, after: 0 }));
+    children.push(line("- Hợp đồng này có hiệu lực kể từ ngày ký cho đến khi thanh lý. Trong thời gian thực hiện hợp đồng, nếu có bất kể sự thay đổi nào đều phải có sự thoả thuận bằng văn bản giữa hai bên.", { align: just, after: 0 }));
+    children.push(line("- Sau khi hai bên thực hiện đầy đủ các nghĩa vụ theo hợp đồng và không còn vướng mắc gì thì hợp đồng sẽ coi như được thanh lý.", { align: just, after: 0 }));
+    children.push(line("- Hợp đồng này được lập thành 02 (hai) bản bằng tiếng Việt, mỗi bên giữ 01 (một) bản có giá trị pháp lý như nhau.", { align: just }));
+    children.push(blank());
+    children.push(signTable("ĐẠI DIỆN BÊN A (BÊN BÁN)", "ĐẠI DIỆN BÊN B (BÊN MUA)"));
+  }
+
+  // ============================================================
+  // PHẦN 2: CÁC BIÊN BẢN BÀN GIAO
+  // ============================================================
+  const bbs = (data.bienbans || []).filter(b => b && b.include !== false);
+  bbs.forEach((bb, idx) => {
+    const needBreak = (data.hopdong && data.hopdong.include) || idx > 0;
+    if (needBreak) {
+      children.push(new Paragraph({ children: [new PageBreak()] }));
+    }
+    children.push(line("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", { bold: true, align: center, after: 0 }));
+    children.push(line("Độc lập - Tự do - Hạnh phúc", { bold: true, align: center, after: 0 }));
+    children.push(line("---o0o---", { align: center }));
+    children.push(blank());
+    children.push(line("BIÊN BẢN BÀN GIAO HÀNG HÓA", { bold: true, align: center, size: SZH, after: 0 }));
+    children.push(line(`(Số: ${bb.so || "…………/BBBG"})`, { italics: true, align: center }));
+    children.push(blank());
+    const diadiem = (data.ben_a && data.ben_a.diachi) || "";
+    children.push(line(`Hôm nay, ngày ${bb.ngay || "…"} tháng ${bb.thang || "…"} năm ${bb.nam || "……"}, tại ${diadiem}, chúng tôi gồm có:`, { align: just }));
+    children.push(blank());
+
+    partyBlock(data.ben_a, data.ben_b, "BÊN A (BÊN GIAO)", "BÊN B (BÊN NHẬN)").forEach(p => children.push(p));
+    children.push(blank());
+    children.push(line("Hai bên cùng tiến hành bàn giao và nhận hàng hóa với nội dung chi tiết như sau:", { align: just }));
+    children.push(line("I. DANH MỤC HÀNG HÓA BÀN GIAO", { bold: true }));
+
+    // Bảng hàng hóa
+    const headFill = "D9E2F3";
+    const thin = { style: BorderStyle.SINGLE, size: 4, color: "000000" };
+    const cellBorders = { top: thin, bottom: thin, left: thin, right: thin };
+    const colW = [800, 4200, 1200, 1560, 1600]; // tổng 9360
+    const headers = ["STT", "Tên hàng hóa/Thiết bị", "Đơn vị", "Số lượng", "Tình trạng hàng hóa"];
+    const headRow = new TableRow({
+      tableHeader: true,
+      children: headers.map((h, i) => new TableCell({
+        width: { size: colW[i], type: WidthType.DXA },
+        borders: cellBorders,
+        shading: { fill: headFill, type: ShadingType.CLEAR, color: "auto" },
+        verticalAlign: VerticalAlign.CENTER,
+        margins: { top: 40, bottom: 40, left: 80, right: 80 },
+        children: [new Paragraph({ alignment: center, spacing: { after: 0 }, children: [run(h, { bold: true })] })]
+      }))
+    });
+    const items = (bb.items && bb.items.length) ? bb.items : [{ ten: "", donvi: "", soluong: "", tinhtrang: "" }];
+    const bodyRows = items.map((it, i) => new TableRow({
+      children: [
+        new TableCell({ width: { size: colW[0], type: WidthType.DXA }, borders: cellBorders, verticalAlign: VerticalAlign.CENTER, margins: { top: 40, bottom: 40, left: 80, right: 80 },
+          children: [new Paragraph({ alignment: center, spacing: { after: 0 }, children: [run(String(i + 1))] })] }),
+        new TableCell({ width: { size: colW[1], type: WidthType.DXA }, borders: cellBorders, verticalAlign: VerticalAlign.CENTER, margins: { top: 40, bottom: 40, left: 80, right: 80 },
+          children: [new Paragraph({ spacing: { after: 0 }, children: [run(it.ten)] })] }),
+        new TableCell({ width: { size: colW[2], type: WidthType.DXA }, borders: cellBorders, verticalAlign: VerticalAlign.CENTER, margins: { top: 40, bottom: 40, left: 80, right: 80 },
+          children: [new Paragraph({ alignment: center, spacing: { after: 0 }, children: [run(it.donvi)] })] }),
+        new TableCell({ width: { size: colW[3], type: WidthType.DXA }, borders: cellBorders, verticalAlign: VerticalAlign.CENTER, margins: { top: 40, bottom: 40, left: 80, right: 80 },
+          children: [new Paragraph({ alignment: center, spacing: { after: 0 }, children: [run(it.soluong)] })] }),
+        new TableCell({ width: { size: colW[4], type: WidthType.DXA }, borders: cellBorders, verticalAlign: VerticalAlign.CENTER, margins: { top: 40, bottom: 40, left: 80, right: 80 },
+          children: [new Paragraph({ alignment: center, spacing: { after: 0 }, children: [run(it.tinhtrang || "Đạt tiêu chuẩn")] })] })
+      ]
+    }));
+    children.push(new Table({
+      width: { size: 9360, type: WidthType.DXA },
+      columnWidths: colW,
+      rows: [headRow, ...bodyRows]
+    }));
+    children.push(blank());
+
+    children.push(line("II. XÁC NHẬN NHẬN HÀNG", { bold: true }));
+    children.push(line("- Bên A đã giao và Bên B xác nhận đã nhận đủ số lượng và đúng chủng loại hàng hóa nêu trên.", { align: just, after: 0 }));
+    children.push(line("- Hàng hóa tại thời điểm bàn giao đạt tiêu chuẩn.", { after: 0 }));
+    children.push(line("- Bên A có trách nhiệm xuất hóa đơn cho bên B.", {}));
+    children.push(line("Biên bản được lập thành 02 bản có giá trị pháp lý như nhau, mỗi bên giữ 01 bản.", { align: just }));
+    children.push(blank());
+    children.push(signTable("ĐẠI DIỆN BÊN GIAO", "ĐẠI DIỆN BÊN NHẬN"));
+  });
+
+  const doc = new Document({
+    styles: { default: { document: { run: { font: FONT, size: SZ } } } },
+    sections: [{
+      properties: {
+        page: {
+          size: { width: 11906, height: 16838 }, // A4
+          margin: { top: 1134, right: 1134, bottom: 1134, left: 1418, header: 567, footer: 567 } // ~2-2.5cm
+        }
+      },
+      children
+    }]
+  });
+  return doc;
+}
+
+</script>
+<script>(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+  var toastEl = $("toast"), statusEl = $("status");
+  function toast(msg, err){
+    toastEl.textContent = msg; toastEl.className = "toast show" + (err ? " err" : "");
+    setTimeout(function(){ toastEl.className = "toast"; }, 2600);
+  }
+  function setStatus(t){ statusEl.textContent = t; }
+
+  // ---- lưu / nạp thông tin (an toàn nếu trình duyệt chặn) ----
+  function store(key, val){ try{ localStorage.setItem(key, val); }catch(e){} }
+  function load(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
+
+  var DEFAULT_B = {
+    ten:"CÔNG TY TNHH YẾN ANH QUALITY CO",
+    daidien:"PHẠM THỊ YẾN", chucvu:"Giám đốc",
+    diachi:"Số 6, thôn Yên Trường, Xã Ứng Thiên, TP Hà Nội, Việt Nam.", mst:"0111330003"
+  };
+
+  function fillB(b){
+    $("b_ten").value=b.ten; $("b_daidien").value=b.daidien; $("b_chucvu").value=b.chucvu;
+    $("b_diachi").value=b.diachi; $("b_mst").value=b.mst;
+  }
+  // nạp thông tin công ty mình (Bên mua) đã lưu, nếu chưa có dùng mặc định.
+  // Bên bán (đối tác) luôn để trống để điền mới mỗi lần.
+  (function(){
+    var saved = load("hdtool_B");
+    try{ fillB(saved ? JSON.parse(saved) : DEFAULT_B); }catch(e){ fillB(DEFAULT_B); }
+  })();
+
+  // ---- thu gọn / mở thẻ Bên A ----
+  document.querySelectorAll(".chev").forEach(function(c){
+    c.addEventListener("click", function(){
+      var card = $(c.getAttribute("data-toggle"));
+      card.classList.toggle("collapsed");
+      c.textContent = card.classList.contains("collapsed") ? "Sửa ▾" : "Thu gọn ▴";
+    });
+  });
+
+  // ---- biên bản động ----
+  var bbList = $("bbList"), bbTpl = $("bbTpl"), rowTpl = $("rowTpl");
+
+  function addRow(tbody, preset){
+    var tr = rowTpl.content.firstElementChild.cloneNode(true);
+    if(preset){
+      tr.querySelector(".g_ten").value = preset.ten||"";
+      tr.querySelector(".g_dv").value  = preset.donvi||"";
+      tr.querySelector(".g_sl").value  = preset.soluong||"";
+      tr.querySelector(".g_tt").value  = preset.tinhtrang||"";
+    }
+    tr.querySelector(".rmrow").addEventListener("click", function(){
+      if(tbody.children.length>1) tr.remove();
+      else toast("Cần ít nhất 1 dòng hàng", true);
+    });
+    tbody.appendChild(tr);
+  }
+
+  function renumber(){
+    var tags = bbList.querySelectorAll(".bbnum");
+    tags.forEach(function(t,i){ t.textContent = (i+1); });
+  }
+
+  function addBB(){
+    var node = bbTpl.content.firstElementChild.cloneNode(true);
+    var tbody = node.querySelector(".rows");
+    node.querySelector(".addRow").addEventListener("click", function(){ addRow(tbody); });
+    node.querySelector(".rmbb").addEventListener("click", function(){
+      node.remove(); renumber();
+    });
+    addRow(tbody);
+    bbList.appendChild(node);
+    renumber();
+    return node;
+  }
+
+  $("addBB").addEventListener("click", addBB);
+  // tạo sẵn 1 biên bản trống cho tiện
+  addBB();
+
+  // ---- đọc dữ liệu từ form ----
+  function val(id){ var e=$(id); return e ? e.value.trim() : ""; }
+
+  function gather(){
+    var a = { ten:val("a_ten"), daidien:val("a_daidien"), chucvu:val("a_chucvu"), diachi:val("a_diachi"), mst:val("a_mst") };
+    var b = { ten:val("b_ten"), daidien:val("b_daidien"), chucvu:val("b_chucvu"), diachi:val("b_diachi"), mst:val("b_mst") };
+
+    var bienbans = [];
+    bbList.querySelectorAll(".bb").forEach(function(card){
+      var items = [];
+      card.querySelectorAll(".rows tr").forEach(function(tr){
+        var ten = tr.querySelector(".g_ten").value.trim();
+        var dv  = tr.querySelector(".g_dv").value.trim();
+        var sl  = tr.querySelector(".g_sl").value.trim();
+        var tt  = tr.querySelector(".g_tt").value.trim();
+        if(ten||dv||sl||tt) items.push({ ten:ten, donvi:dv, soluong:sl, tinhtrang:tt });
+      });
+      bienbans.push({
+        so: card.querySelector(".bb_so").value.trim(),
+        ngay: card.querySelector(".bb_ngay").value.trim(),
+        thang: card.querySelector(".bb_thang").value.trim(),
+        nam: card.querySelector(".bb_nam").value.trim(),
+        items: items
+      });
+    });
+    // chỉ giữ biên bản có nhập gì đó
+    bienbans = bienbans.filter(function(bb){
+      return bb.so || (bb.items && bb.items.length);
+    });
+
+    return {
+      ben_a:a, ben_b:b,
+      hopdong: {
+        include: $("hd_include").checked,
+        so: val("hd_so"), ngay: val("hd_ngay"), thang: val("hd_thang"), nam: val("hd_nam"),
+        sothanhtoan: val("hd_tt")
+      },
+      bienbans: bienbans
+    };
+  }
+
+  function slug(s){
+    return (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+      .replace(/đ/g,"d").replace(/Đ/g,"D")
+      .replace(/[^A-Za-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40) || "DoiTac";
+  }
+
+  function download(blob, name){
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 1500);
+  }
+
+  // ---- xuất file ----
+  $("exportBtn").addEventListener("click", function(){
+    var data = gather();
+    if(!data.ben_a.ten){ toast("Chưa nhập tên đối tác (Bên bán)", true); $("a_ten").focus(); return; }
+    var hasHD = data.hopdong.include;
+    var hasBB = data.bienbans.length>0;
+    if(!hasHD && !hasBB){ toast("Chưa có nội dung để xuất", true); return; }
+
+    // lưu lại thông tin công ty mình để lần sau khỏi gõ
+    store("hdtool_B", JSON.stringify(data.ben_b));
+
+    setStatus("Đang tạo file…");
+    try{
+      var doc = buildDocument(data, window.docx);
+      window.docx.Packer.toBlob(doc).then(function(blob){
+        var datepart = (data.hopdong.ngay||"") && (data.hopdong.ngay+"-"+data.hopdong.thang+"-"+data.hopdong.nam);
+        var name = "HopDong_" + slug(data.ben_a.ten) + (datepart ? "_"+datepart : "") + ".docx";
+        download(blob, name);
+        setStatus("Đã tạo xong");
+        toast("Đã xuất file: " + name);
+      }).catch(function(err){
+        console.error(err); setStatus("Lỗi"); toast("Lỗi khi tạo file: " + err.message, true);
+      });
+    }catch(err){
+      console.error(err); setStatus("Lỗi"); toast("Lỗi: " + err.message, true);
+    }
+  });
+
+  // ---- xóa thông tin đối tác ----
+  $("resetBtn").addEventListener("click", function(){
+    ["a_ten","a_daidien","a_chucvu","a_diachi","a_mst","hd_so","hd_tt","hd_ngay","hd_thang","hd_nam"].forEach(function(id){ $(id).value=""; });
+    bbList.innerHTML=""; addBB();
+    toast("Đã xóa thông tin đối tác");
+    $("a_ten").focus();
+  });
+})();
+</script>
+</body>
+</html>

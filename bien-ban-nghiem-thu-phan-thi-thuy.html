@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biên bản nghiệm thu dịch vụ — HKD Phan Thị Thủy</title>
+<style>
+  :root{
+    --bg:#eaeef1; --panel:#ffffff; --ink:#11333f; --ink-soft:#4d6470;
+    --line:#d7dee3; --line-soft:#e7ecef; --field:#f7f9fa;
+    --teal:#0f5566; --teal-d:#0b3f4c; --seal:#b5402f; --seal-soft:#f4e3df;
+    --ok:#1f7a4d; --shadow:0 1px 2px rgba(17,51,63,.06),0 8px 24px rgba(17,51,63,.07);
+    --r:12px;
+  }
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.5;padding-bottom:96px}
+  .serif{font-family:Cambria,"Times New Roman",Georgia,serif}
+  header.bar{background:linear-gradient(180deg,#0f5566,#0b3f4c);color:#eaf3f5;padding:22px 20px}
+  header.bar .wrap{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px}
+  .seal{flex:0 0 auto;width:54px;height:54px;border-radius:50%;border:2px solid var(--seal);color:var(--seal);display:grid;place-items:center;font-weight:700;font-size:11px;text-align:center;background:#fff;line-height:1.05;transform:rotate(-8deg);box-shadow:0 0 0 4px rgba(181,64,47,.12)}
+  header.bar h1{margin:0;font-size:22px;letter-spacing:.2px}
+  header.bar p{margin:3px 0 0;font-size:13px;color:#bcd4d9}
+  .backlink{color:#eaf3f5;text-decoration:none;border:1px solid rgba(255,255,255,.3);padding:8px 14px;border-radius:8px;font-size:14px;white-space:nowrap}
+  main{max-width:920px;margin:22px auto;padding:0 16px;display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .card>.head{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line-soft);background:#fbfcfd}
+  .card>.head .ix{flex:0 0 auto;width:26px;height:26px;border-radius:7px;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+  .card>.head h2{margin:0;font-size:16px}
+  .card>.head .note{margin-left:auto;font-size:12.5px;color:var(--ink-soft)}
+  .card>.body{padding:16px 18px}
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin:0 0 5px}
+  input[type=text], textarea, select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--field);color:var(--ink);font-size:15px;font-family:inherit}
+  textarea{min-height:60px;resize:vertical;line-height:1.45}
+  input[type=text]:focus, textarea:focus, select:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(15,85,102,.12)}
+  .field{margin-bottom:13px} .field:last-child{margin-bottom:0}
+  .grid{display:grid;gap:13px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .dmy{grid-template-columns:1fr 1fr 1.2fr}
+  @media(max-width:620px){.g2,.g3{grid-template-columns:1fr}}
+  .chev{margin-left:8px;color:var(--ink-soft);cursor:pointer;user-select:none;font-size:13px;font-weight:600}
+  .collapsed .body{display:none}
+  .pill{display:inline-block;padding:3px 9px;border-radius:999px;background:#eef3f5;color:var(--ink-soft);font-size:12px;font-weight:600;margin-left:6px}
+  .calc{background:#f3f8f9;border:1px solid #d6e6ea;border-radius:9px;padding:10px 12px;font-size:14px;color:var(--ink);margin-top:8px}
+  .calc b{color:var(--teal-d)}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:9px}
+  .actionbar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:12px 16px;z-index:30}
+  .actionbar .wrap{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:14px}
+  .actionbar .hint{font-size:12.5px;color:var(--ink-soft)}
+  .btn-export{margin-left:auto;background:var(--teal);color:#fff;font-weight:700;font-size:16px;padding:13px 24px;border-radius:11px;display:inline-flex;align-items:center;gap:9px;box-shadow:0 6px 16px rgba(15,85,102,.28)}
+  .btn-export:hover{background:var(--teal-d)}
+  .btn-export:active{transform:translateY(1px)}
+  .btn-ghost{background:#eef2f4;color:var(--ink);font-weight:600;padding:11px 16px;border:1px solid var(--line)}
+  .btn-ghost:hover{background:#e3e9ec}
+  .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:var(--shadow)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{background:var(--seal)}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <div class="seal serif">BB<br>NT</div>
+    <div style="flex:1">
+      <h1 class="serif">Biên bản nghiệm thu dịch vụ</h1>
+      <p>HKD Phan Thị Thủy (Bên thuê) · ghi nhận kết quả nghiệm thu → xuất Word.</p>
+    </div>
+    <a href="index.html" class="backlink">← Chọn mẫu khác</a>
+  </div>
+</header>
+
+<main>
+  <!-- THÔNG TIN BIÊN BẢN -->
+  <section class="card">
+    <div class="head"><span class="ix">i</span><h2>Thông tin biên bản</h2></div>
+    <div class="body">
+      <div class="grid g2">
+        <div class="field"><label>Số biên bản</label><input type="text" id="bb_so" placeholder="VD: 01/BBNT-2026"></div>
+        <div class="field"><label>Địa điểm lập</label><input type="text" id="bb_diadiem" placeholder="VD: Hà Nội"></div>
+      </div>
+      <label>Ngày lập biên bản</label>
+      <div class="grid dmy">
+        <input type="text" id="bb_ngay" placeholder="Ngày">
+        <input type="text" id="bb_thang" placeholder="Tháng">
+        <input type="text" id="bb_nam" placeholder="Năm">
+      </div>
+      <div style="margin-top:14px;padding-top:10px;border-top:1px dashed var(--line-soft)">
+        <div style="font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:8px">Tham chiếu hợp đồng dịch vụ đã ký</div>
+        <div class="grid g2">
+          <div class="field"><label>Số hợp đồng</label><input type="text" id="hd_so" placeholder="VD: 01/2026/HĐ-NaLth"></div>
+          <div class="field">
+            <label>Ngày ký hợp đồng</label>
+            <div class="grid dmy">
+              <input type="text" id="hd_ngay" placeholder="Ngày">
+              <input type="text" id="hd_thang" placeholder="Tháng">
+              <input type="text" id="hd_nam" placeholder="Năm">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÊN A -->
+  <section class="card collapsed" id="cardA">
+    <div class="head">
+      <span class="ix">A</span>
+      <h2>Bên A — Bên thuê dịch vụ <span class="pill">cố định</span></h2>
+      <span class="note">đã lưu sẵn</span>
+      <span class="chev" data-toggle="cardA">Sửa ▾</span>
+    </div>
+    <div class="body">
+      <div class="field"><label>Tên (HKD hoặc cá nhân)</label><input type="text" id="a_ten"></div>
+      <div class="field"><label>Mã số thuế</label><input type="text" id="a_mst"></div>
+      <div class="field"><label>Địa chỉ</label><input type="text" id="a_diachi"></div>
+    </div>
+  </section>
+
+  <!-- BÊN B -->
+  <section class="card">
+    <div class="head"><span class="ix">B</span><h2>Bên B — Bên cung cấp dịch vụ <span class="pill">điền mới</span></h2></div>
+    <div class="body">
+      <div class="field"><label>Tên công ty / cá nhân</label><input type="text" id="b_ten" placeholder="VD: Lê Thanh Huyền"></div>
+      <div class="grid g2">
+        <div class="field"><label>Đại diện (Ông/Bà)</label><input type="text" id="b_daidien" placeholder="VD: Lê Thanh Huyền"></div>
+        <div class="field"><label>Chức vụ</label><input type="text" id="b_chucvu" placeholder="(nếu cá nhân thì để trống)"></div>
+      </div>
+      <div class="field"><label>Địa chỉ</label><input type="text" id="b_diachi"></div>
+      <div class="field"><label>MST / CCCD</label><input type="text" id="b_mst" placeholder="MST nếu là công ty, hoặc CCCD nếu là cá nhân"></div>
+    </div>
+  </section>
+
+  <!-- I. NỘI DUNG NGHIỆM THU -->
+  <section class="card">
+    <div class="head"><span class="ix">I</span><h2>I. Nội dung nghiệm thu</h2></div>
+    <div class="body">
+      <div class="field"><label>Tên dịch vụ</label>
+        <input type="text" id="nd_tendv" placeholder="VD: Quay 01 video quảng cáo bộ sưu tập Hè">
+      </div>
+      <div class="grid g2">
+        <div class="field"><label>Thực hiện — Từ ngày</label>
+          <div class="grid dmy">
+            <input type="text" id="tg_tu_ngay" placeholder="Ngày">
+            <input type="text" id="tg_tu_thang" placeholder="Tháng">
+            <input type="text" id="tg_tu_nam" placeholder="Năm">
+          </div>
+        </div>
+        <div class="field"><label>Đến ngày</label>
+          <div class="grid dmy">
+            <input type="text" id="tg_den_ngay" placeholder="Ngày">
+            <input type="text" id="tg_den_thang" placeholder="Tháng">
+            <input type="text" id="tg_den_nam" placeholder="Năm">
+          </div>
+        </div>
+      </div>
+      <div class="field"><label>Địa điểm thực hiện</label>
+        <input type="text" id="nd_diadiem" placeholder="VD: Hà Nội">
+      </div>
+      <div class="field"><label>Sản phẩm bàn giao</label>
+        <textarea id="nd_sanpham" placeholder="VD: 01 video clip ~60s đã chỉnh sửa, 100 file ảnh gốc, 20 ảnh đã chỉnh màu"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- II. ĐÁNH GIÁ -->
+  <section class="card">
+    <div class="head"><span class="ix">II</span><h2>II. Đánh giá kết quả</h2></div>
+    <div class="body">
+      <div class="grid g2">
+        <div class="field"><label>Khối lượng hoàn thành (%)</label>
+          <input type="text" id="dg_khoiluong" placeholder="VD: 100" value="100">
+        </div>
+        <div class="field"><label>Về tiến độ</label>
+          <select id="dg_tiendo">
+            <option value="Đúng tiến độ" selected>Đúng tiến độ</option>
+            <option value="Sớm hơn tiến độ">Sớm hơn tiến độ</option>
+            <option value="Trễ tiến độ">Trễ tiến độ</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Về chất lượng (sửa nếu cần)</label>
+        <textarea id="dg_chatluong">Dịch vụ đảm bảo yêu cầu kỹ thuật, thẩm mỹ và các tiêu chí đã đề ra.</textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- III. KẾT LUẬN TÀI CHÍNH -->
+  <section class="card">
+    <div class="head"><span class="ix">III</span><h2>III. Kết luận &amp; thanh toán</h2></div>
+    <div class="body">
+      <div class="field"><label>Giá trị nghiệm thu (VNĐ, đã gồm thuế TNCN)</label>
+        <input type="text" id="kl_tong" placeholder="VD: 3,888,888" inputmode="numeric">
+      </div>
+      <div class="calc">
+        Khấu trừ thuế TNCN 10%: <b id="kl_thue">— VNĐ</b><br>
+        Tổng giá trị thanh toán: <b id="kl_thanhtoan">— VNĐ</b>
+      </div>
+      <div class="field" style="margin-top:13px"><label>Bằng chữ (số tiền thanh toán)</label>
+        <input type="text" id="kl_bangchu" placeholder="VD: Ba triệu năm trăm nghìn đồng">
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="actionbar">
+  <div class="wrap">
+    <button class="btn-ghost" id="resetBtn" type="button">Xóa thông tin Bên B</button>
+    <span class="hint" id="status">Sẵn sàng</span>
+    <button class="btn-export" id="exportBtn" type="button">⬇ Xuất file Word (.docx)</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="vendor/docx-bundle.js"></script>
+<script>
+function buildBBNT(d, D){
+  const { Document, Paragraph, TextRun, Table, TableRow, TableCell,
+    AlignmentType, WidthType, BorderStyle, VerticalAlign } = D;
+  const FONT="Times New Roman", SZ=26, SZH=28;
+  const center=AlignmentType.CENTER, just=AlignmentType.JUSTIFIED;
+  const run = (t,o={}) => new TextRun({ text:t==null?"":String(t), font:FONT, size:o.size||SZ, bold:!!o.bold, italics:!!o.italics });
+  const P = (kids,o={}) => new Paragraph({ children: Array.isArray(kids)?kids:[kids], alignment:o.align, spacing:{ after:o.after==null?60:o.after, line:276 } });
+  const line = (t,o={}) => P([run(t,o)], o);
+  const blank = () => P([run("")], { after:0 });
+
+  function signTable(L,R){
+    const nb={style:BorderStyle.NONE,size:0,color:"FFFFFF"};
+    const bd={top:nb,bottom:nb,left:nb,right:nb};
+    const cell = (l1,l2) => new TableCell({ width:{size:4680,type:WidthType.DXA}, borders:bd, margins:{top:40,bottom:40,left:80,right:80},
+      children:[
+        new Paragraph({ alignment:center, spacing:{after:0}, children:[run(l1,{bold:true})] }),
+        new Paragraph({ alignment:center, spacing:{after:0}, children:[run(l2,{italics:true})] })
+      ]});
+    return new Table({
+      width:{size:9360,type:WidthType.DXA}, columnWidths:[4680,4680],
+      borders:{top:nb,bottom:nb,left:nb,right:nb,insideHorizontal:nb,insideVertical:nb},
+      rows:[ new TableRow({ children:[cell(L,"(Ký tên, đóng dấu)"), cell(R,"(Ký tên, đóng dấu / ký ghi rõ họ tên)")] }) ]
+    });
+  }
+
+  const a=d.a, b=d.b, bb=d.bb, hd=d.hd, nd=d.nd, dg=d.dg, kl=d.kl;
+  const ch=[];
+
+  ch.push(line("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", { bold:true, align:center, after:0 }));
+  ch.push(line("Độc lập - Tự do - Hạnh phúc", { bold:true, align:center, after:0 }));
+  ch.push(line("---o0o---", { align:center }));
+  ch.push(blank());
+  ch.push(line("BIÊN BẢN NGHIỆM THU DỊCH VỤ", { bold:true, align:center, size:SZH, after:0 }));
+  ch.push(line(`(Số: ${bb.so || "……/BBNT-202…"})`, { italics:true, align:center }));
+  ch.push(blank());
+
+  const refDay = (hd.ngay && hd.thang && hd.nam) ? `${hd.ngay}/${hd.thang}/${hd.nam}` : "…/…/20…";
+  const benBName = b.ten || "[TÊN CÔNG TY / CÁ NHÂN]";
+  ch.push(line(`Căn cứ Hợp đồng dịch vụ số: ${hd.so || "……………."} ký ngày ${refDay} giữa ${a.ten} và ${benBName}.`, { align:just }));
+  ch.push(line("Căn cứ vào kết quả thực hiện thực tế và các sản phẩm bàn giao.", { align:just }));
+  ch.push(blank());
+
+  const lapDay = `Hôm nay, ngày ${bb.ngay||"…"} tháng ${bb.thang||"…"} năm ${bb.nam||"……"}, tại ${bb.diadiem||"……………"}, chúng tôi gồm có:`;
+  ch.push(line(lapDay, { align:just }));
+  ch.push(blank());
+
+  // BÊN A
+  ch.push(P([run("BÊN A (Bên thuê dịch vụ): ", { bold:true }), run(a.ten, { bold:true })]));
+  ch.push(P([run("Mã số thuế: ", { bold:true }), run(a.mst)]));
+  ch.push(P([run("Địa chỉ: ", { bold:true }), run(a.diachi)]));
+  ch.push(blank());
+  // BÊN B
+  ch.push(P([run("BÊN B (Bên cung cấp dịch vụ): ", { bold:true }), run(benBName, { bold:true })]));
+  if (b.daidien) {
+    const kids = [run("Đại diện: Ông/Bà ", { bold:true }), run(b.daidien)];
+    if (b.chucvu) { kids.push(run("        Chức vụ: ", { bold:true })); kids.push(run(b.chucvu)); }
+    ch.push(P(kids));
+  }
+  ch.push(P([run("Địa chỉ: ", { bold:true }), run(b.diachi)]));
+  ch.push(P([run("MST / CCCD: ", { bold:true }), run(b.mst)]));
+  ch.push(blank());
+
+  ch.push(line("Hai bên cùng tiến hành nghiệm thu và xác nhận kết quả thực hiện dịch vụ như sau:", { align:just }));
+  ch.push(blank());
+
+  // I
+  ch.push(line("I. NỘI DUNG NGHIỆM THU", { bold:true }));
+  ch.push(P([run("Tên dịch vụ: ", { bold:true }), run(nd.tendv)]));
+  const tgStr = (nd.tu && nd.den) ? `Từ ngày ${nd.tu} đến ngày ${nd.den}` : "Từ ngày …/…/20… đến ngày …/…/20…";
+  ch.push(P([run("Thời gian thực hiện: ", { bold:true }), run(tgStr)]));
+  ch.push(P([run("Địa điểm thực hiện: ", { bold:true }), run(nd.diadiem)]));
+  ch.push(P([run("Sản phẩm bàn giao: ", { bold:true }), run(nd.sanpham)], { align:just }));
+  ch.push(blank());
+
+  // II
+  ch.push(line("II. ĐÁNH GIÁ KẾT QUẢ", { bold:true }));
+  const kl_pct = (dg.khoiluong || "100").replace(/%$/,"");
+  ch.push(P([run("Về khối lượng: ", { bold:true }), run(`Bên B đã hoàn thành ${kl_pct}% khối lượng công việc theo đúng phạm vi thỏa thuận tại Hợp đồng.`)], { align:just }));
+  ch.push(P([run("Về chất lượng: ", { bold:true }), run(dg.chatluong)], { align:just }));
+  ch.push(P([run("Về tiến độ: ", { bold:true }), run(dg.tiendo + ".")], { align:just }));
+  ch.push(blank());
+
+  // III
+  ch.push(line("III. KẾT LUẬN", { bold:true }));
+  ch.push(line("Bên A đồng ý nghiệm thu toàn bộ kết quả dịch vụ nêu trên.", { align:just }));
+  ch.push(P([run("Giá trị nghiệm thu: ", { bold:true }), run(`${kl.tongStr || "……………………"} VNĐ.`)]));
+  ch.push(P([run("Khấu trừ thuế thu nhập cá nhân 10%: ", { bold:true }), run(`${kl.thueStr || "……………………"} VNĐ.`)]));
+  ch.push(P([run("Tổng giá trị thanh toán: ", { bold:true }), run(`${kl.thanhtoanStr || "……………………"} VNĐ.`)]));
+  if (kl.bangchu) ch.push(P([run("(Bằng chữ: ", { italics:true }), run(kl.bangchu, { italics:true }), run(")", { italics:true })]));
+  ch.push(blank());
+
+  ch.push(line("Biên bản này là căn cứ để hai bên thực hiện thanh lý hợp đồng và làm thủ tục thanh toán. Biên bản được lập thành 02 bản có giá trị pháp lý như nhau.", { align:just }));
+  ch.push(blank());
+
+  ch.push(signTable("ĐẠI DIỆN BÊN A", "ĐẠI DIỆN BÊN B"));
+
+  return new Document({
+    styles: { default: { document: { run: { font: FONT, size: SZ } } } },
+    sections:[{
+      properties:{ page:{ size:{width:11906,height:16838}, margin:{top:1134,right:1134,bottom:1134,left:1418,header:567,footer:567} } },
+      children: ch
+    }]
+  });
+}
+</script>
+
+<script>(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const toastEl=$("toast"), statusEl=$("status");
+  const toast = (m,err) => { toastEl.textContent=m; toastEl.className="toast show"+(err?" err":""); setTimeout(()=>toastEl.className="toast", 2600); };
+  const setStatus = t => statusEl.textContent = t;
+  const store = (k,v) => { try{ localStorage.setItem(k,v); }catch(e){} };
+  const load = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
+
+  const DEFAULT_A = {
+    ten: "Hộ Kinh doanh Phan Thị Thủy",
+    mst: "040183007304",
+    diachi: "Số nhà 3, ngách 36, ngõ 156, phố Sở Thượng, Phường Hoàng Mai, TP Hà Nội"
+  };
+  function fillA(a){ $("a_ten").value=a.ten; $("a_mst").value=a.mst; $("a_diachi").value=a.diachi; }
+  (function(){ const s=load("bbnt_A"); try{ fillA(s?JSON.parse(s):DEFAULT_A); }catch(e){ fillA(DEFAULT_A); } })();
+
+  document.querySelectorAll(".chev").forEach(c => {
+    c.addEventListener("click", ()=>{
+      const card = $(c.getAttribute("data-toggle"));
+      card.classList.toggle("collapsed");
+      c.textContent = card.classList.contains("collapsed") ? "Sửa ▾" : "Thu gọn ▴";
+    });
+  });
+
+  // money format
+  const onlyDigits = s => (s||"").replace(/[^\d]/g,"");
+  const fmt = n => (n==""||n==null||isNaN(n)) ? "" : Number(n).toLocaleString("en-US");
+  const tongEl = $("kl_tong");
+  tongEl.addEventListener("input", ()=>{
+    const raw = onlyDigits(tongEl.value);
+    tongEl.value = raw ? fmt(raw) : "";
+    recalc();
+  });
+  function recalc(){
+    const tong = Number(onlyDigits(tongEl.value)) || 0;
+    const thue = Math.round(tong*0.1);
+    const tt = tong - thue;
+    $("kl_thue").textContent       = tong ? fmt(thue) + " VNĐ" : "— VNĐ";
+    $("kl_thanhtoan").textContent  = tong ? fmt(tt)   + " VNĐ" : "— VNĐ";
+  }
+
+  function toDate(d,m,y){
+    d=+d; m=+m; y=+y;
+    if(!d||!m||!y) return null;
+    const dt = new Date(y,m-1,d);
+    return (dt.getFullYear()===y && dt.getMonth()===m-1 && dt.getDate()===d) ? dt : null;
+  }
+  const fmtD = d => `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+  const val = id => { const e=$(id); return e ? e.value.trim() : ""; };
+
+  function gather(){
+    const tong = Number(onlyDigits(val("kl_tong"))) || 0;
+    const thue = Math.round(tong*0.1);
+    const tt = tong - thue;
+    const d1 = toDate(val("tg_tu_ngay"), val("tg_tu_thang"), val("tg_tu_nam"));
+    const d2 = toDate(val("tg_den_ngay"), val("tg_den_thang"), val("tg_den_nam"));
+    return {
+      bb: { so:val("bb_so"), ngay:val("bb_ngay"), thang:val("bb_thang"), nam:val("bb_nam"), diadiem:val("bb_diadiem") || "Hà Nội" },
+      hd: { so:val("hd_so"), ngay:val("hd_ngay"), thang:val("hd_thang"), nam:val("hd_nam") },
+      a:  { ten:val("a_ten"), mst:val("a_mst"), diachi:val("a_diachi") },
+      b:  { ten:val("b_ten"), daidien:val("b_daidien"), chucvu:val("b_chucvu"), diachi:val("b_diachi"), mst:val("b_mst") },
+      nd: { tendv:val("nd_tendv"), tu:d1?fmtD(d1):"", den:d2?fmtD(d2):"", diadiem:val("nd_diadiem"), sanpham:val("nd_sanpham") },
+      dg: { khoiluong:val("dg_khoiluong") || "100", chatluong:val("dg_chatluong"), tiendo:val("dg_tiendo") },
+      kl: { tongStr: tong?fmt(tong):"", thueStr: tong?fmt(thue):"", thanhtoanStr: tong?fmt(tt):"", bangchu:val("kl_bangchu") }
+    };
+  }
+
+  function slug(s){
+    return (s||"").normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/đ/g,"d").replace(/Đ/g,"D")
+      .replace(/[^A-Za-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40) || "BenB";
+  }
+  function download(blob, name){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1500);
+  }
+
+  $("exportBtn").addEventListener("click", ()=>{
+    const data = gather();
+    if (!data.b.ten) { toast("Chưa nhập tên Bên B", true); $("b_ten").focus(); return; }
+    if (!data.nd.tendv) { toast("Chưa nhập tên dịch vụ", true); $("nd_tendv").focus(); return; }
+    store("bbnt_A", JSON.stringify(data.a));
+    setStatus("Đang tạo file…");
+    try{
+      const doc = buildBBNT(data, window.docx);
+      window.docx.Packer.toBlob(doc).then(blob => {
+        const dpart = data.bb.ngay ? `${data.bb.ngay}-${data.bb.thang}-${data.bb.nam}` : "";
+        const name = "BienBanNT_" + slug(data.b.ten) + (dpart?"_"+dpart:"") + ".docx";
+        download(blob, name);
+        setStatus("Đã tạo xong");
+        toast("Đã xuất file: " + name);
+      }).catch(err => { console.error(err); setStatus("Lỗi"); toast("Lỗi khi tạo file: " + err.message, true); });
+    }catch(err){ console.error(err); setStatus("Lỗi"); toast("Lỗi: " + err.message, true); }
+  });
+
+  $("resetBtn").addEventListener("click", ()=>{
+    ["b_ten","b_daidien","b_chucvu","b_diachi","b_mst","bb_so","bb_ngay","bb_thang","bb_nam","bb_diadiem",
+     "hd_so","hd_ngay","hd_thang","hd_nam",
+     "nd_tendv","tg_tu_ngay","tg_tu_thang","tg_tu_nam","tg_den_ngay","tg_den_thang","tg_den_nam","nd_diadiem","nd_sanpham",
+     "kl_tong","kl_bangchu"].forEach(id => $(id).value="");
+    $("dg_khoiluong").value="100";
+    $("dg_chatluong").value="Dịch vụ đảm bảo yêu cầu kỹ thuật, thẩm mỹ và các tiêu chí đã đề ra.";
+    $("dg_tiendo").value="Đúng tiến độ";
+    recalc();
+    toast("Đã xóa thông tin Bên B");
+    $("b_ten").focus();
+  });
+})();
+</script>
+</body>
+</html>
