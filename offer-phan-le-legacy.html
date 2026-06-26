@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thư mời nhận việc — Phan Le Legacy</title>
+<style>
+  :root{
+    --bg:#eaeef1; --panel:#ffffff; --ink:#11333f; --ink-soft:#4d6470;
+    --line:#d7dee3; --line-soft:#e7ecef; --field:#f7f9fa;
+    --teal:#0f5566; --teal-d:#0b3f4c; --seal:#b5402f; --seal-soft:#f4e3df;
+    --ok:#1f7a4d; --shadow:0 1px 2px rgba(17,51,63,.06),0 8px 24px rgba(17,51,63,.07);
+    --r:12px;
+  }
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.5;padding-bottom:96px}
+  .serif{font-family:Cambria,"Times New Roman",Georgia,serif}
+  header.bar{background:linear-gradient(180deg,#0f5566,#0b3f4c);color:#eaf3f5;padding:22px 20px}
+  header.bar .wrap{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px}
+  .seal{flex:0 0 auto;width:54px;height:54px;border-radius:50%;border:2px solid var(--seal);color:var(--seal);display:grid;place-items:center;font-weight:700;font-size:11px;text-align:center;background:#fff;line-height:1.05;transform:rotate(-8deg);box-shadow:0 0 0 4px rgba(181,64,47,.12)}
+  header.bar h1{margin:0;font-size:22px;letter-spacing:.2px}
+  header.bar p{margin:3px 0 0;font-size:13px;color:#bcd4d9}
+  .backlink{color:#eaf3f5;text-decoration:none;border:1px solid rgba(255,255,255,.3);padding:8px 14px;border-radius:8px;font-size:14px;white-space:nowrap}
+  main{max-width:920px;margin:22px auto;padding:0 16px;display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .card>.head{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line-soft);background:#fbfcfd}
+  .card>.head .ix{flex:0 0 auto;width:26px;height:26px;border-radius:7px;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+  .card>.head h2{margin:0;font-size:16px}
+  .card>.head .note{margin-left:auto;font-size:12.5px;color:var(--ink-soft)}
+  .card>.body{padding:16px 18px}
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin:0 0 5px}
+  input[type=text], textarea, select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--field);color:var(--ink);font-size:15px;font-family:inherit}
+  textarea{min-height:60px;resize:vertical;line-height:1.45}
+  input[type=text]:focus, textarea:focus, select:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(15,85,102,.12)}
+  .field{margin-bottom:13px} .field:last-child{margin-bottom:0}
+  .grid{display:grid;gap:13px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .g4{grid-template-columns:1fr 1fr 1fr 1fr}
+  .dmy{grid-template-columns:1fr 1fr 1.2fr}
+  @media(max-width:620px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .pill{display:inline-block;padding:3px 9px;border-radius:999px;background:#eef3f5;color:var(--ink-soft);font-size:12px;font-weight:600;margin-left:6px}
+  .hint{font-size:12.5px;color:var(--ink-soft);margin-top:4px}
+  .calc{background:#f3f8f9;border:1px solid #d6e6ea;border-radius:9px;padding:10px 12px;font-size:14px;color:var(--ink);margin-top:8px}
+  .calc b{color:var(--teal-d)}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:9px}
+  .actionbar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:12px 16px;z-index:30}
+  .actionbar .wrap{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:14px}
+  .actionbar .hint{font-size:12.5px;color:var(--ink-soft)}
+  .btn-export{margin-left:auto;background:var(--teal);color:#fff;font-weight:700;font-size:16px;padding:13px 24px;border-radius:11px;display:inline-flex;align-items:center;gap:9px;box-shadow:0 6px 16px rgba(15,85,102,.28)}
+  .btn-export:hover{background:var(--teal-d)}
+  .btn-export:active{transform:translateY(1px)}
+  .btn-ghost{background:#eef2f4;color:var(--ink);font-weight:600;padding:11px 16px;border:1px solid var(--line)}
+  .btn-ghost:hover{background:#e3e9ec}
+  .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:var(--shadow)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{background:var(--seal)}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <div class="seal serif">OF<br>FER</div>
+    <div style="flex:1">
+      <h1 class="serif">Thư mời nhận việc (Offer)</h1>
+      <p>Công ty CP Phan Le Legacy · điền thông tin ứng viên → xuất Word.</p>
+    </div>
+    <a href="index.html" class="backlink">← Chọn mẫu khác</a>
+  </div>
+</header>
+
+<main>
+  <!-- I. THÔNG TIN CHUNG -->
+  <section class="card">
+    <div class="head"><span class="ix">I</span><h2>Thông tin chung</h2></div>
+    <div class="body">
+      <div class="field"><label>Tên ứng viên (Kính gửi…)</label>
+        <input type="text" id="ten_uv" placeholder="VD: Lê Diệu Linh">
+      </div>
+      <div class="grid g2">
+        <div class="field"><label>Chức vụ</label>
+          <input type="text" id="chuc_vu" placeholder="VD: Trợ lý Stylist & Media">
+        </div>
+        <div class="field"><label>Hình thức</label>
+          <select id="hinh_thuc">
+            <option value="Fulltime" selected>Fulltime</option>
+            <option value="Parttime">Parttime</option>
+            <option value="Cộng tác viên">Cộng tác viên</option>
+            <option value="Thực tập sinh">Thực tập sinh</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Quản lý trực tiếp</label>
+        <input type="text" id="quan_ly" placeholder="VD: Nguyễn Phúc Vi Bình">
+      </div>
+
+      <label>Thời điểm bắt đầu nhận việc</label>
+      <div class="grid g4">
+        <div class="field" style="margin:0"><input type="text" id="bd_gio" placeholder="Giờ (VD: 09h00)"></div>
+        <div class="field" style="margin:0"><input type="text" id="bd_thu" placeholder="Thứ (VD: Thứ 7)"></div>
+        <div class="field" style="margin:0"><input type="text" id="bd_ngay" placeholder="Ngày"></div>
+        <div class="field" style="margin:0"><input type="text" id="bd_thang" placeholder="Tháng"></div>
+      </div>
+      <input type="text" id="bd_nam" placeholder="Năm" style="margin-top:8px;max-width:160px">
+
+      <div class="field" style="margin-top:13px"><label>Địa điểm làm việc chính thức</label>
+        <input type="text" id="dia_diem">
+      </div>
+      <div class="field"><label>Thời gian làm việc</label>
+        <input type="text" id="gio_lv">
+      </div>
+    </div>
+  </section>
+
+  <!-- II. LƯƠNG -->
+  <section class="card">
+    <div class="head"><span class="ix">II</span><h2>Lương &amp; phúc lợi</h2></div>
+    <div class="body">
+      <div class="grid g2">
+        <div class="field"><label>Lương cơ bản (đ/tháng)</label>
+          <input type="text" id="luong_cb" placeholder="VD: 7,000,000" inputmode="numeric">
+        </div>
+        <div class="field"><label>Lương hiệu suất KPI (đ/tháng)</label>
+          <input type="text" id="kpi" placeholder="VD: 2,000,000" inputmode="numeric">
+        </div>
+      </div>
+      <div class="field"><label>Thưởng</label>
+        <input type="text" id="thuong" placeholder="VD: theo kết quả kinh doanh tháng / để trống nếu chưa chốt">
+      </div>
+      <div class="grid g2">
+        <div class="field"><label>Thử việc — số tháng</label>
+          <input type="text" id="tv_thang" placeholder="VD: 01" value="01">
+        </div>
+        <div class="field"><label>Thử việc — % lương cơ bản</label>
+          <input type="text" id="tv_pct" placeholder="VD: 85%" value="85%">
+        </div>
+      </div>
+      <div class="grid g2">
+        <div class="field"><label>Phụ cấp ăn (đ/tháng)</label>
+          <input type="text" id="pc_an" placeholder="VD: 500,000" value="500,000" inputmode="numeric">
+        </div>
+        <div class="field"><label>Phụ cấp khác (nếu có)</label>
+          <input type="text" id="pc_khac" placeholder="VD: gửi xe 200.000 đ/tháng / để trống nếu không có">
+        </div>
+      </div>
+      <div class="calc" id="luong_preview">Tổng cơ bản + KPI + phụ cấp ăn: <b id="tong_thu_nhap">— đ/tháng</b></div>
+    </div>
+  </section>
+
+  <!-- III. NGÀY KÝ -->
+  <section class="card">
+    <div class="head"><span class="ix">!</span><h2>Ngày ký thư</h2></div>
+    <div class="body">
+      <label>Hà Nội, ngày … tháng … năm …</label>
+      <div class="grid dmy">
+        <input type="text" id="ky_ngay" placeholder="Ngày">
+        <input type="text" id="ky_thang" placeholder="Tháng">
+        <input type="text" id="ky_nam" placeholder="Năm (VD: 2026)">
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="actionbar">
+  <div class="wrap">
+    <button class="btn-ghost" id="resetBtn" type="button">Xóa thông tin ứng viên</button>
+    <span class="hint" id="status">Sẵn sàng</span>
+    <button class="btn-export" id="exportBtn" type="button">⬇ Xuất file Word (.docx)</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="vendor/docx-bundle.js"></script>
+<script>
+// ===== Build Offer .docx (tái tạo từ đầu, không logo) =====
+function buildOffer(d, D){
+  const { Document, Paragraph, TextRun, AlignmentType, BorderStyle } = D;
+  const FONT="Times New Roman", SZ=26, SZH=32, SZ_TITLE=28;
+  const center=AlignmentType.CENTER, just=AlignmentType.JUSTIFIED, right=AlignmentType.RIGHT;
+
+  const run = (t,o={}) => new TextRun({ text:t==null?"":String(t), font:FONT, size:o.size||SZ, bold:!!o.bold, italics:!!o.italics, underline: o.underline?{}:undefined, color: o.color });
+  const P = (kids,o={}) => new Paragraph({ children: Array.isArray(kids)?kids:[kids], alignment:o.align, spacing:{ after:o.after==null?80:o.after, line:280 } });
+  const line = (t,o={}) => P([run(t,o)], o);
+  const blank = () => P([run("")], { after:0 });
+
+  const ch = [];
+
+  // HEADER: tên công ty (thay logo) + quốc hiệu
+  ch.push(line("CÔNG TY CỔ PHẦN PHAN LE LEGACY", { bold:true, align:center, size:SZH, after:60 }));
+  ch.push(line("CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM", { bold:true, align:center, after:0 }));
+  ch.push(line("Độc lập - Tự do - Hạnh phúc", { bold:true, align:center }));
+  ch.push(blank());
+
+  ch.push(line("THƯ MỜI NHẬN VIỆC", { bold:true, align:center, size:SZ_TITLE, after:120 }));
+
+  ch.push(P([ run("Kính gửi: ", { bold:true }), run(d.ten_uv, { bold:true }) ]));
+  ch.push(line("Công ty chân thành cảm ơn Bạn đã dành thời gian quý báu đến trao đổi công việc tại Công ty chúng tôi. Chúng tôi ghi nhận năng lực và lòng nhiệt thành của Bạn đối với công ty.", { align:just }));
+  ch.push(line("Công ty trân trọng gửi tới Bạn lời mời cộng tác cùng chúng tôi với nội dung sau:", { align:just }));
+  ch.push(blank());
+
+  // I. THÔNG TIN CHUNG
+  ch.push(line("I. Thông tin chung:", { bold:true }));
+  ch.push(P([ run("1. Chức vụ: ", { bold:true }), run(d.chuc_vu) ]));
+  ch.push(P([ run("2. Hình thức: ", { bold:true }), run(d.hinh_thuc) ]));
+  ch.push(P([ run("3. Quản lý trực tiếp: ", { bold:true }), run(d.quan_ly) ]));
+  // Ngày bắt đầu: gộp tất cả 5 input thành 1 dòng
+  const bdParts = [];
+  if (d.bd_gio)   bdParts.push(d.bd_gio);
+  if (d.bd_thu)   bdParts.push(d.bd_thu);
+  if (d.bd_ngay || d.bd_thang || d.bd_nam) {
+    const dmy = `${d.bd_ngay||"…"}/${d.bd_thang||"…"}/${d.bd_nam||"……"}`;
+    bdParts.push("ngày " + dmy);
+  }
+  ch.push(P([ run("4. Ngày bắt đầu nhận việc: ", { bold:true }), run(bdParts.join(" ") || "……………") ]));
+  ch.push(P([ run("5. Địa điểm làm việc chính thức: ", { bold:true }), run((d.dia_diem||"") + (d.dia_diem && !d.dia_diem.endsWith(".") ? "." : "")) ]));
+  ch.push(P([ run("6. Thời gian làm việc: ", { bold:true }), run(d.gio_lv) ]));
+  ch.push(blank());
+
+  // II. LƯƠNG
+  ch.push(line("II. Lương và phúc lợi:", { bold:true }));
+  ch.push(line("1. Cơ cấu lương:", { bold:true, italics:true, after:30 }));
+  ch.push(P([ run("- Lương cơ bản: ", {}), run(d.luong_cb_fmt + " đ/tháng.") ]));
+  if (d.kpi_fmt) ch.push(P([ run("- Lương hiệu suất (KPI): ", {}), run(d.kpi_fmt + " đ/tháng.") ]));
+  ch.push(P([ run("- Thưởng: ", {}), run(d.thuong || "…………..") ]));
+  ch.push(P([ run("- Thử việc: ", {}), run(`${d.tv_thang || "0"} tháng hưởng ${d.tv_pct || "85%"} mức lương cơ bản.`) ]));
+  ch.push(P([ run("2. Phụ cấp ăn: ", { bold:true }), run((d.pc_an_fmt || "0") + " đ/tháng.") ]));
+  ch.push(P([ run("3. Phụ cấp khác (nếu có): ", { bold:true }), run(d.pc_khac || "……………….") ]));
+  ch.push(P([ run("4. Trang thiết bị làm việc: ", { bold:true }), run("Sử dụng trang thiết bị cá nhân để làm việc.") ]));
+  ch.push(P([ run("5. Chế độ phúc lợi: ", { bold:true }), run("theo quy định của Công ty.") ]));
+  ch.push(P([ run("6. Hình thức trả lương: ", { bold:true }), run("Chuyển khoản qua tài khoản cá nhân vào ngày mùng 10 hàng tháng, nhận thưởng KPI vào ngày 16 hàng tháng.") ], { align:just }));
+  ch.push(blank());
+
+  // III
+  ch.push(line("III. Các vấn đề liên quan:", { bold:true }));
+  [
+    "Trước khi kết thúc thời gian thử việc 3 ngày, công ty sẽ có buổi trao đổi và đánh giá về quá trình thử việc với bạn.",
+    "Nếu đạt yêu cầu thử việc, hai bên sẽ ký Hợp đồng lao động ngay sau khi hết thời gian thử việc. Hợp đồng lao động đầu tiên (nếu được ký kết) sẽ là hợp đồng xác định thời hạn (1 năm), không bao gồm thời gian thử việc.",
+    "Trong thời gian thử việc nếu bạn làm việc dưới 03 ngày, công ty mặc định sẽ không thanh toán lương.",
+    "Trong thời gian thử việc, nếu một trong hai bên dừng hợp tác sẽ phải thông báo trước ít nhất 07 ngày."
+  ].forEach((t,i) => ch.push(line(`${i+1}. ${t}`, { align:just, after:30 })));
+  ch.push(blank());
+
+  // IV
+  ch.push(line("IV. Tài liệu cần bổ sung:", { bold:true }));
+  ch.push(line("Bạn vui lòng bổ sung những hồ sơ sau và nộp lại Hành chính – Nhân sự trong 05 ngày làm việc đầu tiên để tiến hành ký hợp đồng thử việc:", { align:just }));
+  ["Tờ khai thông tin nhân viên (Phòng Nhân Sự cấp).",
+   "Link tờ khai: https://forms.gle/DXY3dh2qYuveBwbP8",
+   "Chứng minh thư / CCCD photo công chứng.",
+   "Sơ yếu lý lịch.",
+   "Giấy khám sức khoẻ."].forEach(t => ch.push(line("- " + t, { align:just, after:30 })));
+  ch.push(blank());
+
+  ch.push(line("Hoan nghênh sự gia nhập của Bạn vào công ty và hy vọng chúng ta sẽ có một sự hợp tác tốt đẹp, lâu bền.", { align:just }));
+  ch.push(blank());
+  ch.push(line("Mọi thông tin chi tiết vui lòng liên hệ:", { italics:true }));
+  ch.push(line("Ms. Anh – Phòng Nhân Sự", { after:0 }));
+  ch.push(line("Mobile: 098.320.2264", { after:0 }));
+  ch.push(line("Email: tuyendung.hr.lysilk@gmail.com"));
+  ch.push(blank());
+
+  ch.push(line("Trân trọng,", { italics:true }));
+  const dKy = `Hà Nội, ngày ${d.ky_ngay || "…"} tháng ${d.ky_thang || "…"} năm ${d.ky_nam || "……"}`;
+  ch.push(line(dKy, { align:right }));
+  ch.push(blank());
+  ch.push(line("CÔNG TY CỔ PHẦN PHAN LE LEGACY", { bold:true, align:center, after:0 }));
+  ch.push(line("TỔNG GIÁM ĐỐC", { bold:true, align:center }));
+
+  return new Document({
+    styles: { default: { document: { run: { font: FONT, size: SZ } } } },
+    sections: [{
+      properties: { page: { size:{width:11906,height:16838}, margin:{top:1134,right:1134,bottom:1134,left:1418,header:567,footer:567} } },
+      children: ch
+    }]
+  });
+}
+</script>
+
+<script>(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const toastEl=$("toast"), statusEl=$("status");
+  const toast = (m,err) => { toastEl.textContent=m; toastEl.className="toast show"+(err?" err":""); setTimeout(()=>toastEl.className="toast", 2600); };
+  const setStatus = t => statusEl.textContent = t;
+  const store = (k,v) => { try{ localStorage.setItem(k,v); }catch(e){} };
+  const load = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
+
+  // Mặc định địa điểm + giờ làm việc + một số preset
+  const DEFAULT_PRESET = {
+    dia_diem: "Biệt thự số 14, ngách 2, ngõ 61 Lạc Trung, Hai Bà Trưng, Hà Nội",
+    gio_lv:   "Từ 8h30-17h30, từ thứ 2 đến thứ 7."
+  };
+  (function(){
+    const s = load("offer_preset");
+    let preset = DEFAULT_PRESET;
+    try{ if (s) preset = Object.assign({}, DEFAULT_PRESET, JSON.parse(s)); }catch(e){}
+    $("dia_diem").value = preset.dia_diem;
+    $("gio_lv").value   = preset.gio_lv;
+  })();
+
+  // ---- format số tiền ----
+  const onlyDigits = s => (s||"").replace(/[^\d]/g,"");
+  const fmt = n => (n==""||n==null||isNaN(n)) ? "" : Number(n).toLocaleString("en-US");
+  ["luong_cb","kpi","pc_an"].forEach(id => {
+    const el = $(id);
+    el.addEventListener("input", ()=>{
+      const raw = onlyDigits(el.value);
+      el.value = raw ? fmt(raw) : "";
+      recalcTotal();
+    });
+  });
+  function recalcTotal(){
+    const cb = Number(onlyDigits($("luong_cb").value)) || 0;
+    const k  = Number(onlyDigits($("kpi").value))      || 0;
+    const a  = Number(onlyDigits($("pc_an").value))    || 0;
+    const tot = cb + k + a;
+    $("tong_thu_nhap").textContent = tot ? (fmt(tot) + " đ/tháng") : "— đ/tháng";
+  }
+
+  // ---- gather ----
+  const val = id => { const e=$(id); return e ? e.value.trim() : ""; };
+  function gather(){
+    const cb = Number(onlyDigits(val("luong_cb"))) || 0;
+    const k  = Number(onlyDigits(val("kpi")))      || 0;
+    const a  = Number(onlyDigits(val("pc_an")))    || 0;
+    return {
+      ten_uv:   val("ten_uv"),
+      chuc_vu:  val("chuc_vu"),
+      hinh_thuc:val("hinh_thuc"),
+      quan_ly:  val("quan_ly"),
+      bd_gio:   val("bd_gio"),
+      bd_thu:   val("bd_thu"),
+      bd_ngay:  val("bd_ngay"),
+      bd_thang: val("bd_thang"),
+      bd_nam:   val("bd_nam"),
+      dia_diem: val("dia_diem"),
+      gio_lv:   val("gio_lv"),
+      luong_cb_fmt: cb ? fmt(cb) : "…………",
+      kpi_fmt:      k  ? fmt(k)  : "",
+      thuong:   val("thuong"),
+      tv_thang: val("tv_thang"),
+      tv_pct:   val("tv_pct"),
+      pc_an_fmt: a ? fmt(a) : "0",
+      pc_khac:  val("pc_khac"),
+      ky_ngay:  val("ky_ngay"),
+      ky_thang: val("ky_thang"),
+      ky_nam:   val("ky_nam")
+    };
+  }
+
+  function slug(s){
+    return (s||"").normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/đ/g,"d").replace(/Đ/g,"D")
+      .replace(/[^A-Za-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40) || "UngVien";
+  }
+  function download(blob, name){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1500);
+  }
+
+  $("exportBtn").addEventListener("click", ()=>{
+    const data = gather();
+    if (!data.ten_uv)  { toast("Chưa nhập tên ứng viên", true); $("ten_uv").focus(); return; }
+    if (!data.chuc_vu) { toast("Chưa nhập chức vụ", true); $("chuc_vu").focus(); return; }
+    // Lưu preset địa điểm + giờ LV để lần sau không phải gõ lại
+    store("offer_preset", JSON.stringify({ dia_diem: data.dia_diem, gio_lv: data.gio_lv }));
+    setStatus("Đang tạo file…");
+    try{
+      const doc = buildOffer(data, window.docx);
+      window.docx.Packer.toBlob(doc).then(blob => {
+        const dpart = data.ky_ngay ? `${data.ky_ngay}-${data.ky_thang}-${data.ky_nam}` : "";
+        const name = "Offer_" + slug(data.ten_uv) + (dpart?"_"+dpart:"") + ".docx";
+        download(blob, name);
+        setStatus("Đã tạo xong");
+        toast("Đã xuất file: " + name);
+      }).catch(err => { console.error(err); setStatus("Lỗi"); toast("Lỗi khi tạo file: " + err.message, true); });
+    }catch(err){ console.error(err); setStatus("Lỗi"); toast("Lỗi: " + err.message, true); }
+  });
+
+  $("resetBtn").addEventListener("click", ()=>{
+    ["ten_uv","chuc_vu","quan_ly","bd_gio","bd_thu","bd_ngay","bd_thang","bd_nam",
+     "luong_cb","kpi","thuong","pc_khac","ky_ngay","ky_thang","ky_nam"].forEach(id => $(id).value="");
+    $("hinh_thuc").value = "Fulltime";
+    $("tv_thang").value = "01";
+    $("tv_pct").value = "85%";
+    $("pc_an").value = "500,000";
+    recalcTotal();
+    toast("Đã xóa thông tin ứng viên");
+    $("ten_uv").focus();
+  });
+})();
+</script>
+</body>
+</html>
