@@ -175,7 +175,8 @@
 <script>
 // ===== Build Offer .docx (tái tạo từ đầu, không logo) =====
 function buildOffer(d, D){
-  const { Document, Paragraph, TextRun, AlignmentType, BorderStyle } = D;
+  const { Document, Paragraph, TextRun, Table, TableRow, TableCell,
+    AlignmentType, WidthType, BorderStyle, VerticalAlign } = D;
   const FONT="Times New Roman", SZ=26, SZH=32, SZ_TITLE=28;
   const center=AlignmentType.CENTER, just=AlignmentType.JUSTIFIED, right=AlignmentType.RIGHT;
 
@@ -184,12 +185,32 @@ function buildOffer(d, D){
   const line = (t,o={}) => P([run(t,o)], o);
   const blank = () => P([run("")], { after:0 });
 
+  // Bảng KHÔNG border (giống form gốc — chỉ khung bố cục, không in ra giấy)
+  const noBorder = { style: BorderStyle.NONE, size: 0, color: "FFFFFF" };
+  const tblBorders = { top:noBorder, bottom:noBorder, left:noBorder, right:noBorder, insideHorizontal:noBorder, insideVertical:noBorder };
+  const cellBorders = { top:noBorder, bottom:noBorder, left:noBorder, right:noBorder };
+  const TCell = (paras, opts={}) => new TableCell({
+    width: { size: opts.w, type: WidthType.DXA },
+    borders: cellBorders,
+    verticalAlign: opts.vAlign || VerticalAlign.TOP,
+    margins: { top:40, bottom:40, left:80, right:80 },
+    children: paras
+  });
+
   const ch = [];
 
-  // HEADER: tên công ty (thay logo) + quốc hiệu
-  ch.push(line("CÔNG TY CỔ PHẦN PHAN LE LEGACY", { bold:true, align:center, size:SZH, after:60 }));
-  ch.push(line("CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM", { bold:true, align:center, after:0 }));
-  ch.push(line("Độc lập - Tự do - Hạnh phúc", { bold:true, align:center }));
+  // ====== HEADER TABLE: trái = tên CTY, phải = quốc hiệu + khẩu hiệu ======
+  ch.push(new Table({
+    width: { size: 9300, type: WidthType.DXA },
+    columnWidths: [2700, 6600],
+    borders: tblBorders,
+    rows: [ new TableRow({ children: [
+      TCell([ line("CÔNG TY CỔ PHẦN", { bold:true, align:center, after:0 }),
+              line("PHAN LE LEGACY",   { bold:true, align:center, after:0 }) ], { w:2700, vAlign: VerticalAlign.CENTER }),
+      TCell([ line("CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM", { bold:true, align:center, after:0 }),
+              line("Độc lập - Tự do - Hạnh phúc",         { bold:true, align:center, after:0 }) ], { w:6600, vAlign: VerticalAlign.CENTER })
+    ] }) ]
+  }));
   ch.push(blank());
 
   ch.push(line("THƯ MỜI NHẬN VIỆC", { bold:true, align:center, size:SZ_TITLE, after:120 }));
@@ -222,13 +243,16 @@ function buildOffer(d, D){
   ch.push(line("1. Cơ cấu lương:", { bold:true, italics:true, after:30 }));
   ch.push(P([ run("- Lương cơ bản: ", {}), run(d.luong_cb_fmt + " đ/tháng.") ]));
   if (d.kpi_fmt) ch.push(P([ run("- Lương hiệu suất (KPI): ", {}), run(d.kpi_fmt + " đ/tháng.") ]));
-  ch.push(P([ run("- Thưởng: ", {}), run(d.thuong || "…………..") ]));
+  if (d.thuong) ch.push(P([ run("- Thưởng: ", {}), run(d.thuong) ]));   // ẩn nếu không điền
   ch.push(P([ run("- Thử việc: ", {}), run(`${d.tv_thang || "0"} tháng hưởng ${d.tv_pct || "85%"} mức lương cơ bản.`) ]));
-  ch.push(P([ run("2. Phụ cấp ăn: ", { bold:true }), run((d.pc_an_fmt || "0") + " đ/tháng.") ]));
-  ch.push(P([ run("3. Phụ cấp khác (nếu có): ", { bold:true }), run(d.pc_khac || "……………….") ]));
-  ch.push(P([ run("4. Trang thiết bị làm việc: ", { bold:true }), run("Sử dụng trang thiết bị cá nhân để làm việc.") ]));
-  ch.push(P([ run("5. Chế độ phúc lợi: ", { bold:true }), run("theo quy định của Công ty.") ]));
-  ch.push(P([ run("6. Hình thức trả lương: ", { bold:true }), run("Chuyển khoản qua tài khoản cá nhân vào ngày mùng 10 hàng tháng, nhận thưởng KPI vào ngày 16 hàng tháng.") ], { align:just }));
+
+  // Numbered list — đánh số tự động, "1." là Cơ cấu lương ở trên nên bắt đầu từ 2
+  let n = 2;
+  ch.push(P([ run(`${n++}. Phụ cấp ăn: `, { bold:true }), run((d.pc_an_fmt || "0") + " đ/tháng.") ]));
+  if (d.pc_khac) ch.push(P([ run(`${n++}. Phụ cấp khác (nếu có): `, { bold:true }), run(d.pc_khac) ]));   // ẩn nếu không điền
+  ch.push(P([ run(`${n++}. Trang thiết bị làm việc: `, { bold:true }), run("Sử dụng trang thiết bị cá nhân để làm việc.") ]));
+  ch.push(P([ run(`${n++}. Chế độ phúc lợi: `, { bold:true }), run("theo quy định của Công ty.") ]));
+  ch.push(P([ run(`${n++}. Hình thức trả lương: `, { bold:true }), run("Chuyển khoản qua tài khoản cá nhân vào ngày mùng 10 hàng tháng, nhận thưởng KPI vào ngày 16 hàng tháng.") ], { align:just }));
   ch.push(blank());
 
   // III
@@ -260,11 +284,33 @@ function buildOffer(d, D){
   ch.push(blank());
 
   ch.push(line("Trân trọng,", { italics:true }));
-  const dKy = `Hà Nội, ngày ${d.ky_ngay || "…"} tháng ${d.ky_thang || "…"} năm ${d.ky_nam || "……"}`;
-  ch.push(line(dKy, { align:right }));
   ch.push(blank());
-  ch.push(line("CÔNG TY CỔ PHẦN PHAN LE LEGACY", { bold:true, align:center, after:0 }));
-  ch.push(line("TỔNG GIÁM ĐỐC", { bold:true, align:center }));
+
+  // ====== FOOTER TABLE: bảng 2 hàng × 2 cột (chỗ ký) — không border ======
+  // Hàng 1: trái trống, phải = "Hà Nội ngày..." + "CÔNG TY CỔ PHẦN PHAN LE LEGACY" + "TỔNG GIÁM ĐỐC"
+  // Hàng 2: cả 2 cell trống (chừa chỗ ký tên + đóng dấu, cao ~80pt)
+  const dKy = `Hà Nội, ngày ${d.ky_ngay || "…"} tháng ${d.ky_thang || "…"} năm ${d.ky_nam || "……"}`;
+  const signRowHeight = 1600;  // ~1.1 inch — chỗ trống để ký
+  ch.push(new Table({
+    width: { size: 9300, type: WidthType.DXA },
+    columnWidths: [5300, 4000],
+    borders: tblBorders,
+    rows: [
+      new TableRow({ children: [
+        TCell([ line("", {}) ], { w:5300 }),
+        TCell([ line(dKy, { italics:true, align:center, after:60 }),
+                line("CÔNG TY CỔ PHẦN PHAN LE LEGACY", { bold:true, align:center, after:0 }),
+                line("TỔNG GIÁM ĐỐC", { bold:true, align:center, after:0 }) ], { w:4000 })
+      ] }),
+      new TableRow({
+        height: { value: signRowHeight, rule: "atLeast" },
+        children: [
+          TCell([ line("", {}) ], { w:5300 }),
+          TCell([ line("", {}) ], { w:4000 })
+        ]
+      })
+    ]
+  }));
 
   return new Document({
     styles: { default: { document: { run: { font: FONT, size: SZ } } } },
